@@ -1,0 +1,10 @@
+.elevated-button {
+    background-color: #221c1c;
+    color: #9067c6;
+
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.elevated-button:hover::after {
+    background-color: #ffffff11;
+}

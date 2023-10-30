@@ -1,0 +1,34 @@
+#login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+
+    /* align-self: center; */
+
+    min-width: 350px;
+    max-width: 450px;
+    width: 100%;
+
+    margin: auto;
+
+    gap: 12px;
+    padding: 24px;
+
+    background-color: #0b0909;
+    border-radius: 28px;
+
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+#login-logo {
+    align-self: center;
+
+    height: clamp(200px, 40vh, 500px);
+}
+
+#register-title {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 24px;
+}

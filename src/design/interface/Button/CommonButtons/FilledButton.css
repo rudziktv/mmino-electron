@@ -1,0 +1,10 @@
+.filled-button {
+    background-color: #9067c6;
+    /* color: #9067c6; */
+
+    /* box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1); */
+}
+
+.filled-button:hover::after {
+    background-color: #ffffff11;
+}

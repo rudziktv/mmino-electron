@@ -1,0 +1,41 @@
+#root {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    text-align: center;
+    overflow: hidden;
+}
+
+#content {
+    width: 100%;
+    height: calc(100vh - 32px);
+
+    display: flex;
+    overflow-y: auto;
+
+    align-items: flex-start;
+
+    position: relative;
+
+    /* overflow: hidden; */
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #0b0909;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #221c1c;
+
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    cursor: pointer;
+    background-color: #8d86c9;
+}

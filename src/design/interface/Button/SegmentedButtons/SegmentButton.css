@@ -1,0 +1,26 @@
+.segment-button {
+    height: 40px;
+    min-width: 128px;
+
+    font-family: Lexend;
+    font-size: 16px;
+
+    color: #9b90a2;
+
+    padding: 0 12px;
+    border: 1px solid #9b90a2;
+
+    background: transparent;
+    border-collapse: collapse;
+
+    transition: 0.2s;
+}
+
+.segment-button:hover {
+    cursor: pointer;
+}
+
+.segmented-buttons > .active {
+    background-color: #242038;
+    color: #8d86c9;
+}

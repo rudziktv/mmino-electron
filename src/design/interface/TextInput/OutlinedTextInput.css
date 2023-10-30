@@ -1,0 +1,95 @@
+.outlined-text-input {
+    background-color: transparent;
+    font-size: 20px;
+
+    border: 0;
+
+    font-family: Lexend;
+    z-index: 1;
+
+    color: rgba(255, 255, 255, 0.87);
+
+    transition: 0.2s;
+
+    flex: 1;
+}
+
+.outlined-text-input::placeholder {
+    opacity: 0;
+}
+
+.outlined-text-input:focus {
+    outline: none;
+
+    color: rgba(255, 255, 255, 0.87);
+}
+
+.outlined-text-input-container {
+    border: 2px solid #9b90a2;
+    border-radius: 8px;
+
+    height: 56px;
+    min-height: 56px;
+
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    padding: 0 16px;
+
+    font-size: 20px;
+
+    transition: 0.2s;
+}
+
+.outlined-text-input-container.error {
+    border-color: #f44336 !important;
+    color: #f44336;
+}
+
+.outlined-text-input-container.error > .outlined-text-input-label,
+.outlined-text-input-container.error > .outlined-text-input {
+    color: #f44336 !important;
+}
+
+.outlined-text-input-container:has(.outlined-text-input:focus) {
+    border-color: #9067c6;
+
+    /* border-width: 3px; */
+}
+
+.outlined-text-input-label {
+    position: absolute;
+
+    padding: 0 6px;
+    color: #9b90a2;
+    background-color: #171212;
+
+    transition: 0.2s;
+    top: 16px;
+}
+
+.outlined-text-input:not(:placeholder-shown) ~ .outlined-text-input-label,
+.outlined-text-input:focus ~ .outlined-text-input-label {
+    top: -10px;
+
+    font-size: 14px;
+}
+
+.outlined-text-input:focus ~ .outlined-text-input-label {
+    color: #9067c6;
+}
+
+.text-input-supporting-text-container {
+    display: flex;
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 4px 16px;
+    gap: 16px;
+}
+
+.text-input-supporting-text.error {
+    color: #f44336;
+}

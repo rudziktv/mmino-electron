@@ -1,0 +1,13 @@
+.segmented-buttons > .segment-button:first-child {
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.segmented-buttons > .segment-button:last-child {
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.segmented-buttons {
+    border-collapse: collapse;
+}

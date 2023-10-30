@@ -1,0 +1,71 @@
+#app-bar {
+    background-color: #0B0909;
+
+    -webkit-app-region: drag;
+
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    position: relative;
+
+    padding: 6px;
+}
+
+#window-title {
+
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+
+#window-controls {
+    -webkit-app-region: no-drag;
+
+    display: flex;
+
+    gap: 3px;
+
+    right: 0;
+}
+
+#window-controls > button {
+
+    width: 24px;
+    height: 24px;
+
+    border-radius: 12px;
+    border: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+#window-controls > button::after {
+
+    content: '';
+    width: 24px;
+    height: 24px;
+    position: absolute;
+}
+
+#window-controls > button:hover::after {
+    
+    background-color: #ffffff33;
+    border-radius: 12px;
+}
+
+#minApp {
+    background-color: #8d86c9;
+}
+
+#maxApp {
+    background-color: #8B9D83;
+}
+
+#closeApp {
+    background-color: #dd4055;
+}

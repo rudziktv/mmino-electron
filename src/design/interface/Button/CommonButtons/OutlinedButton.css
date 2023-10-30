@@ -1,0 +1,10 @@
+.outlined-button {
+    background-color: transparent;
+    color: #9067c6;
+
+    border: 1px solid #9b90a2;
+}
+
+.outlined-button:hover::after {
+    background-color: #ffffff11;
+}

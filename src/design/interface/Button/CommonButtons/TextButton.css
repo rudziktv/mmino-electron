@@ -1,0 +1,8 @@
+.text-button {
+    background-color: transparent;
+    color: #9067c6;
+}
+
+.text-button:hover::after {
+    background-color: #ffffff11;
+}
