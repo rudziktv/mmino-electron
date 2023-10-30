@@ -9,7 +9,6 @@ import {
     PasswordValidate,
 } from "../app/validation/FormValidation";
 import { supabase } from "../supabase/client";
-import { showMessageBox } from "../../electron/ipc";
 import LoadingModal from "../design/interface/LoadingModal/LoadingModal";
 import RegisterModal from "../components/RegisterModal";
 import ErrorModal from "../components/ErrorModal";
@@ -61,11 +60,8 @@ const Register = () => {
         setIsLoading(false);
 
         if (error) {
-            showMessageBox({
-                title: "Error during registration",
-                message: error.message,
-                type: "error",
-            });
+            setError(error);
+            setSignUpFailed(true);
         }
     };
 

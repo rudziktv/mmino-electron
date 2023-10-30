@@ -7,6 +7,11 @@
     overflow: hidden;
 }
 
+#modal-context {
+    position: relative;
+    overflow: hidden;
+}
+
 #content {
     width: 100%;
     height: calc(100vh - 32px);
@@ -16,10 +21,15 @@
 
     align-items: flex-start;
 
-    position: relative;
+    /* position: relative; */
 
     /* overflow: hidden; */
 }
+
+/* #content:has(.dialog-modal-blur) {
+    overflow: hidden;
+    
+} */
 
 ::-webkit-scrollbar {
     width: 12px;

@@ -13,9 +13,11 @@ function App() {
     return (
         <>
             <AppBar />
-            <main id="content">
-                <Outlet />
-            </main>
+            <section id="modal-context">
+                <main id="content">
+                    <Outlet />
+                </main>
+            </section>
         </>
     );
 }
