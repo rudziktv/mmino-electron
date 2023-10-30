@@ -21,6 +21,10 @@
     box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
 }
 
+#content:has(#login-container) {
+    padding: 24px;
+}
+
 #login-logo {
     align-self: center;
 

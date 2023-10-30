@@ -10,14 +10,20 @@
 #modal-context {
     position: relative;
     overflow: hidden;
+    width: 100vw;
+    height: calc(100vh - 32px);
 }
 
 #content {
     width: 100%;
     height: calc(100vh - 32px);
 
+    /* height: fit-content; */
+
     display: flex;
     overflow-y: auto;
+
+    box-sizing: border-box;
 
     align-items: flex-start;
 
