@@ -36,3 +36,29 @@
     font-weight: bold;
     margin: 24px;
 }
+
+#login-divider {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    padding: 0 16px;
+}
+
+#login-providers {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 16px;
+}
+
+#login-divider > hr {
+    flex: 1;
+}
+
+#login-divider > span {
+    margin: 0 16px;
+}

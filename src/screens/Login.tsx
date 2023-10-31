@@ -9,6 +9,8 @@ import logo from "../assets/logo_without_bg.png";
 import LoadingModal from "../design/interface/LoadingModal/LoadingModal";
 import { AuthError } from "@supabase/supabase-js";
 import ErrorModal from "../components/ErrorModal";
+import BaseIconButton from "../design/interface/Button/IconButtons/BaseIconButton";
+import Tooltip from "../design/interface/Tooltip/Tooltip";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -19,6 +21,8 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [loginFailed, setLoginFailed] = useState(false);
     const [error, setError] = useState<AuthError>();
+
+    const providersTooltip = "Work on providers is in progress";
 
     const handleLogin = async () => {
         setIsLoading(true);
@@ -71,6 +75,7 @@ const Login = () => {
                     placeholder="Password"
                     value={password}
                     onChangeText={setPassword}
+                    type="password"
                 />
 
                 <TextButton
@@ -97,6 +102,32 @@ const Login = () => {
                         navigate("/app/register");
                     }}
                 />
+
+                <div id="login-divider">
+                    <hr />
+                    <span id="login-divider-or">OR</span>
+                    <hr />
+                </div>
+
+                <span>Login via social accounts</span>
+
+                <div id="login-providers">
+                    <Tooltip content={providersTooltip}>
+                        <BaseIconButton icon="ri-google-fill" disabled />
+                    </Tooltip>
+                    <Tooltip content={providersTooltip}>
+                        <BaseIconButton
+                            icon="ri-facebook-circle-fill"
+                            disabled
+                        />
+                    </Tooltip>
+                    <Tooltip content={providersTooltip}>
+                        <BaseIconButton icon="ri-spotify-fill" disabled />
+                    </Tooltip>
+                    <Tooltip content={providersTooltip}>
+                        <BaseIconButton icon="ri-discord-fill" disabled />
+                    </Tooltip>
+                </div>
 
                 {/* <SegmentedButtons
                     activeValue={gender}
