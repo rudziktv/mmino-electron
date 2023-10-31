@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabase/client";
 import logo from "../assets/logo_without_bg.png";
 import LoadingModal from "../design/interface/LoadingModal/LoadingModal";
-import { AuthError } from "@supabase/supabase-js";
+import { AuthError, Provider } from "@supabase/supabase-js";
 import ErrorModal from "../components/ErrorModal";
 import BaseIconButton from "../design/interface/Button/IconButtons/BaseIconButton";
 import Tooltip from "../design/interface/Tooltip/Tooltip";
@@ -22,7 +22,7 @@ const Login = () => {
     const [loginFailed, setLoginFailed] = useState(false);
     const [error, setError] = useState<AuthError>();
 
-    const providersTooltip = "Work on providers is in progress";
+    const providersTooltip = "Work on providers is in progress.";
 
     const handleLogin = async () => {
         setIsLoading(true);
@@ -45,6 +45,20 @@ const Login = () => {
             //     message: error.message,
             //     type: "error",
             // });
+        }
+    };
+
+    const handleProvider = async (name: Provider) => {
+        const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: name,
+            options: {
+                redirectTo: window.location.origin,
+            },
+        });
+
+        if (error) {
+            setError(error);
+            setLoginFailed(true);
         }
     };
 
@@ -113,7 +127,11 @@ const Login = () => {
 
                 <div id="login-providers">
                     <Tooltip content={providersTooltip}>
-                        <BaseIconButton icon="ri-google-fill" disabled />
+                        <BaseIconButton
+                            icon="ri-google-fill"
+                            // disabled
+                            onClick={() => handleProvider("google")}
+                        />
                     </Tooltip>
                     <Tooltip content={providersTooltip}>
                         <BaseIconButton
@@ -122,10 +140,18 @@ const Login = () => {
                         />
                     </Tooltip>
                     <Tooltip content={providersTooltip}>
-                        <BaseIconButton icon="ri-spotify-fill" disabled />
+                        <BaseIconButton
+                            icon="ri-spotify-fill"
+                            // disabled
+                            onClick={() => handleProvider("spotify")}
+                        />
                     </Tooltip>
                     <Tooltip content={providersTooltip}>
-                        <BaseIconButton icon="ri-discord-fill" disabled />
+                        <BaseIconButton
+                            icon="ri-discord-fill"
+                            // disabled
+                            onClick={() => handleProvider("discord")}
+                        />
                     </Tooltip>
                 </div>
 
