@@ -4,16 +4,21 @@ import "./NavigationRailButton.css";
 import "remixicon/fonts/remixicon.css";
 
 const NavigationRailButton = (props: NavigationRailButtonProps) => {
-    const active = props.index === props.currentIndex;
+    const active = props.id === props.currentId;
 
     const ref = useRef(null);
-    const ripples = useRipple(ref);
+    const [ripples, invokeRipple] = useRipple(ref);
 
     return (
         <button
             ref={ref}
             className={`navigation-rail-button ${active && "active"}`}
-            onClick={props.onClick}
+            onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                invokeRipple(e);
+                props.onClick?.();
+            }}
         >
             <div className="rail-btn-plate">
                 {ripples}
@@ -25,8 +30,8 @@ const NavigationRailButton = (props: NavigationRailButtonProps) => {
 };
 
 export interface NavigationRailButtonProps {
-    index?: number;
-    currentIndex?: number;
+    id?: string;
+    currentId?: string;
     label?: string;
     icon?: string;
     activeIcon?: string;

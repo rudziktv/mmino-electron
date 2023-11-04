@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import OutlinedTextInput from "../design/interface/TextInput/OutlinedTextInput";
 import ElevatedButton from "../design/interface/Button/CommonButtons/ElevatedButton";
 import TextButton from "../design/interface/Button/CommonButtons/TextButton";
@@ -11,6 +11,8 @@ import { AuthError, Provider } from "@supabase/supabase-js";
 import ErrorModal from "../components/ErrorModal";
 import BaseIconButton from "../design/interface/Button/IconButtons/BaseIconButton";
 import Tooltip from "../design/interface/Tooltip/Tooltip";
+import { signInWithGoogle } from "../../electron/ipc";
+import useAuth from "../hooks/useAuth";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -22,7 +24,15 @@ const Login = () => {
     const [loginFailed, setLoginFailed] = useState(false);
     const [error, setError] = useState<AuthError>();
 
+    const auth = useAuth();
+
     const providersTooltip = "Work on providers is in progress.";
+
+    useEffect(() => {
+        if (auth) {
+            navigate("/app/main");
+        }
+    });
 
     const handleLogin = async () => {
         setIsLoading(true);
@@ -32,19 +42,11 @@ const Login = () => {
             password,
         });
 
-        // await new Promise((resolve) => setTimeout(resolve, 5000));
-
         setIsLoading(false);
 
         if (error) {
             setError(error);
             setLoginFailed(true);
-
-            // showMessageBox({
-            //     title: "Error during login",
-            //     message: error.message,
-            //     type: "error",
-            // });
         }
     };
 
@@ -60,6 +62,11 @@ const Login = () => {
             setError(error);
             setLoginFailed(true);
         }
+    };
+
+    const handleGoogle = () => {
+        setIsLoading(true);
+        signInWithGoogle();
     };
 
     return (
@@ -130,7 +137,7 @@ const Login = () => {
                         <BaseIconButton
                             icon="ri-google-fill"
                             // disabled
-                            onClick={() => handleProvider("google")}
+                            onClick={handleGoogle}
                         />
                     </Tooltip>
                     <Tooltip content={providersTooltip}>
@@ -142,18 +149,23 @@ const Login = () => {
                     <Tooltip content={providersTooltip}>
                         <BaseIconButton
                             icon="ri-spotify-fill"
-                            // disabled
+                            disabled
                             onClick={() => handleProvider("spotify")}
                         />
                     </Tooltip>
                     <Tooltip content={providersTooltip}>
                         <BaseIconButton
                             icon="ri-discord-fill"
-                            // disabled
+                            disabled
                             onClick={() => handleProvider("discord")}
                         />
                     </Tooltip>
                 </div>
+
+                <TextButton
+                    title="Go back to menu"
+                    onClick={() => navigate("/app/main")}
+                />
 
                 {/* <SegmentedButtons
                     activeValue={gender}

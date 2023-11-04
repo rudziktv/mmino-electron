@@ -1,0 +1,65 @@
+#player-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 12px 24px;
+}
+
+#player-controls-mid {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    max-width: 720px;
+    gap: 12px;
+}
+
+#player-controls-top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 12px;
+}
+
+#player-controls-bottom {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#player-controls-left {
+    display: flex;
+    align-items: center;
+    width: 256px;
+    gap: 12px;
+}
+
+#player-controls-right {
+    width: 256px;
+}
+
+#player-controls-info {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+#player-controls-title {
+    font-size: 18px;
+}
+
+#player-controls-artist {
+    color: #9b90a2;
+    font-size: 14px;
+    font-weight: 300;
+}
+
+#player-controls-cover {
+    width: 72px;
+    height: 72px;
+
+    border-radius: 8px;
+
+    background-color: #382e2e;
+}

@@ -9,15 +9,23 @@ const BaseIconButton = ({
     ...props
 }: BaseIconButtonProps) => {
     const ref = useRef(null);
-    const ripples = useRipple(ref);
+    const [ripples, invokeRipple] = useRipple(ref);
+
+    const toggable = toggled != null;
 
     return (
         <button
             {...props}
+            onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                invokeRipple(e);
+                props.onClick?.(e);
+            }}
             ref={ref}
-            className={`base-icon-button ${props.className} ${
+            className={`base-icon-button ${toggable && "toggable"} ${
                 toggled && "toggled"
-            }`}
+            } ${props.className}`}
         >
             {ripples}
             <i

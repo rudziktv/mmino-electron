@@ -1,13 +1,31 @@
-import { MessageBoxOptions, contextBridge, ipcRenderer } from "electron";
+import {
+    DownloadItem,
+    MessageBoxOptions,
+    app,
+    contextBridge,
+    ipcRenderer,
+} from "electron";
+import {
+    DOWNLOAD_URL_CHANNEL,
+    DownloadCallback,
+    DownloadConfig,
+} from "../src/services/download/DownloadIpcMain";
+import {
+    GET_APP_PATH_CHANNEL,
+    GET_PATH_CHANNEL,
+    PathTypes,
+    getAppPathContextBridge,
+    getPathContextBridge,
+} from "../src/services/path/PathIpcMain";
 
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld("ipcRenderer", withPrototype(ipcRenderer));
 
-contextBridge.exposeInMainWorld("electronAPI", {
-    send: (channel: string, data: any[]) => {
-        ipcRenderer.send(channel, data);
-    },
-});
+// contextBridge.exposeInMainWorld("electronAPI", {
+//     send: (channel: string, data: any[]) => {
+//         ipcRenderer.send(channel, data);
+//     },
+// });
 
 // `exposeInMainWorld` can't detect attributes and methods of `prototype`, manually patching it.
 function withPrototype(obj: Record<string, any>) {
@@ -138,4 +156,40 @@ contextBridge.exposeInMainWorld("dialogAPI", {
 contextBridge.exposeInMainWorld("interfaceAPI", {
     minimizeApp: () => ipcRenderer.invoke("minimizeWindow"),
     maximizeApp: () => ipcRenderer.invoke("maximizeWindow"),
+});
+
+contextBridge.exposeInMainWorld("supabaseAPI", {
+    signInWithGoogle: () => ipcRenderer.invoke("signInWithGoogle"),
+    signInWithFacebook: () => ipcRenderer.invoke("signInWithFacebook"),
+    signInWithSpotify: () => ipcRenderer.invoke("signInWithSpotify"),
+    signInWithDiscord: () => ipcRenderer.invoke("signInWithDiscord"),
+});
+
+contextBridge.exposeInMainWorld("restAPI", {
+    downloadFile: (url: string) => ipcRenderer.invoke("downloadFile", url),
+});
+
+contextBridge.exposeInMainWorld("downloadAPI", {
+    downloadUrl: (config: DownloadConfig) => {
+        // console.log("downloadurl", config);
+        const { url, downloadOptions, callback, directory } = config;
+        const eventChannel = `downloadUrl-${url}`;
+        ipcRenderer.invoke(
+            "downloadUrl",
+            JSON.stringify({ url, downloadOptions, eventChannel, directory })
+            // config.downloadOptions
+        );
+
+        ipcRenderer.on(eventChannel, (event, item: DownloadItem) => {
+            alert(eventChannel);
+            callback(item);
+        });
+    },
+});
+
+contextBridge.exposeInMainWorld("pathAPI", {
+    getPath: async (type: PathTypes) =>
+        (await ipcRenderer.invoke(GET_PATH_CHANNEL, type)) as string,
+    getAppPath: async () =>
+        (await ipcRenderer.invoke(GET_APP_PATH_CHANNEL, "appPath")) as string,
 });

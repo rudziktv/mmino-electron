@@ -5,9 +5,14 @@ import { useEffect } from "react";
 
 function App() {
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
-        navigate("app/main");
+        if (location.pathname === "/") {
+            navigate("app/main");
+        }
+
+        // navigate("app/main");
     }, []);
 
     return (

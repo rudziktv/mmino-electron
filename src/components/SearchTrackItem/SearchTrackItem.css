@@ -1,0 +1,103 @@
+.search-track-item {
+    display: flex;
+
+    align-items: center;
+    padding: 12px;
+    gap: 12px;
+
+    position: relative;
+    overflow: visible;
+}
+
+.search-track-item::after {
+    content: "";
+
+    width: 100%;
+    height: 100%;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    transition: 0.2s ease-in-out;
+}
+
+.search-track-item:hover::after {
+    background-color: #ffffff11;
+}
+
+.search-track-item:hover {
+    cursor: pointer;
+}
+
+.search-track-item-cover {
+    min-width: 72px;
+    min-height: 72px;
+    border-radius: 8px;
+    background-color: #382e2e;
+    position: relative;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 32px;
+    z-index: -1;
+
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    /* background- */
+}
+
+.search-track-item-info {
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-start;
+}
+
+.search-track-item-title {
+    font-size: 20px;
+
+    text-align: left;
+}
+
+.search-track-item-artist {
+    color: #9b90a2;
+}
+
+.search-track-item-actions {
+    margin-left: auto;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-track-item-ripples {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    transition: 0.2s ease-in-out;
+}
+
+.search-track-item-duration {
+    position: absolute;
+    font-size: 16px;
+
+    padding: 0 4px;
+    border-radius: 4px;
+    bottom: 4px;
+    left: 4px;
+
+    background-color: black;
+}
+
+/* .search-track-item-ripples:hover {
+    background-color: #ffffff11;
+} */

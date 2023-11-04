@@ -1,0 +1,114 @@
+.switch-track {
+    min-width: 52px;
+    min-height: 32px;
+    width: 52px;
+    height: 32px;
+
+    box-sizing: border-box;
+
+    background-color: #382e2e;
+
+    border-radius: 16px;
+    border: 2px solid #9b90a2;
+
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    transition: 0.2s ease-in-out;
+}
+
+.switch-track:hover {
+    cursor: pointer;
+}
+
+.disabled {
+    opacity: 0.5;
+}
+
+.disabled:hover {
+    cursor: not-allowed;
+}
+
+.switch-thumb {
+    position: absolute;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    left: 0;
+    transform: translateX(8px);
+
+    width: 16px;
+    height: 16px;
+
+    border-radius: 14px;
+    background-color: #9b90a2;
+
+    transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.switch-thumb:has(.switch-icon-off) {
+    min-width: 24px;
+    min-height: 24px;
+    transform: translateX(2px);
+}
+
+.toggled {
+    border-color: #9067c6;
+    background-color: #9067c6;
+}
+
+.toggled > .switch-thumb {
+    width: 24px;
+    height: 24px;
+    left: 20px;
+
+    background-color: #242038;
+
+    transform: translateX(2px);
+}
+
+.switch-track:active > .switch-thumb {
+    width: 28px;
+    height: 28px;
+
+    transform: translateX(0px);
+}
+
+.switch-track:disabled:active > .switch-thumb {
+    width: 24px;
+    height: 24px;
+
+    transform: translateX(2px);
+}
+
+.toggled > .switch-thumb > .switch-icon-on {
+    color: #9067c6;
+    opacity: 1;
+    scale: 1;
+}
+
+.toggled > .switch-thumb > .switch-icon-off {
+    opacity: 0;
+    scale: 0;
+}
+
+.switch-icon-on {
+    opacity: 0;
+    scale: 0;
+}
+
+.switch-icon-off {
+    opacity: 1;
+    scale: 1;
+}
+
+.switch-icon {
+    position: absolute;
+    color: #382e2e;
+
+    transition: 0.2s ease-in-out;
+}

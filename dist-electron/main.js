@@ -1,6 +1,40 @@
 "use strict";
 const electron = require("electron");
 const path = require("node:path");
+const DownloadFileHandler = (window, app, config) => {
+  if (window) {
+    window.webContents.session.downloadURL(
+      config.url,
+      config.downloadOptions
+    );
+    window.webContents.session.on(
+      "will-download",
+      (_, item, webContents) => {
+        if (item.getURL() === config.url) {
+          if (config.directory) {
+            item.setSavePath(config.directory);
+          }
+          item.on("updated", (_2, state) => {
+            window.webContents.send(
+              `updated-${config.eventChannel}`,
+              2
+            );
+            item.getTotalBytes();
+            item.getFilename();
+          });
+          item.once("done", (_2, state) => {
+            window.webContents.send(
+              `done-${config.eventChannel}`,
+              2
+            );
+          });
+        }
+      }
+    );
+  }
+};
+const GET_PATH_CHANNEL = "getPath";
+const GET_APP_PATH_CHANNEL = "getAppPath";
 process.env.DIST = path.join(__dirname, "../dist");
 process.env.VITE_PUBLIC = electron.app.isPackaged ? process.env.DIST : path.join(process.env.DIST, "../public");
 let win;
@@ -64,7 +98,37 @@ electron.app.whenReady().then(() => {
       win == null ? void 0 : win.maximize();
     }
   });
+  electron.ipcMain.handle("signInWithGoogle", () => {
+    const testWin = new electron.BrowserWindow({
+      webPreferences: {
+        preload: path.join(__dirname, "preload.js"),
+        // contextIsolation: false,
+        nodeIntegration: true,
+        sandbox: false
+        // enableRemoteModule: true,
+        // devTools: true
+      }
+    });
+    if (VITE_DEV_SERVER_URL) {
+      testWin.loadURL(
+        `${VITE_DEV_SERVER_URL}app/login/google/twojastara`
+      );
+    }
+  });
   createWindow();
+  electron.ipcMain.handle("downloadFile", (_, url) => {
+    win == null ? void 0 : win.webContents.session.downloadURL(url);
+  });
+  electron.ipcMain.handle("downloadUrl", (_, configJSON) => {
+    const config = JSON.parse(configJSON);
+    DownloadFileHandler(win, electron.app, config);
+  });
+  electron.ipcMain.handle(GET_PATH_CHANNEL, (_, type) => {
+    return electron.app.getPath(type);
+  });
+  electron.ipcMain.handle(GET_APP_PATH_CHANNEL, () => {
+    return electron.app.getAppPath();
+  });
 });
 electron.ipcMain.on("minimizeWindow", () => {
   win == null ? void 0 : win.minimize();

@@ -1,0 +1,16 @@
+.filled-icon-button {
+    background-color: #242038;
+    color: #cac4ce;
+
+    /* color: rbga(255, 255, 255, 1); */
+}
+
+.filled-icon-button.toggable {
+    background-color: #382e2e;
+    color: #9067c6;
+}
+
+.filled-icon-button.toggled {
+    background-color: #9067c6;
+    color: #242038;
+}

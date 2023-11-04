@@ -11,8 +11,8 @@ const NavigationRail = (props: NavigationRailProps) => {
                     <NavigationRailButton
                         key={index}
                         {...button}
-                        index={index}
-                        currentIndex={props.currentIndex}
+                        // id={button.}
+                        currentId={props.currentId}
                     />
                 ))}
             </section>
@@ -22,13 +22,14 @@ const NavigationRail = (props: NavigationRailProps) => {
 
 export interface NavigationRailProps {
     buttons?: NavigationRailButtonProps[];
-    currentIndex?: number;
+    currentId?: string;
 }
 
 export interface NavigationRailListProps {
     label?: string;
     icon?: string;
     activeIcon?: string;
+    id: string;
 }
 
 export default NavigationRail;

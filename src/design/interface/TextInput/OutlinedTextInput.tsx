@@ -5,6 +5,7 @@ import { useRef } from "react";
 const OutlinedTextInput = ({
     backgroundColor = "#171212",
     type = "text",
+    onChangeText,
     ...props
 }: OutlinedTextInputProps) => {
     const ref = useRef<HTMLInputElement>(null);
@@ -25,7 +26,7 @@ const OutlinedTextInput = ({
                     className="outlined-text-input"
                     placeholder="xd"
                     onChange={(e) => {
-                        props.onChangeText?.(e.target.value);
+                        onChangeText?.(e.target.value);
                     }}
                     ref={ref}
                 />

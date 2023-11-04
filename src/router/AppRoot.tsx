@@ -4,6 +4,10 @@ import AppRail from "./AppRail";
 import Login from "../screens/Login";
 import Register from "../screens/Register";
 import Home from "../screens/Home";
+import GoogleProvider from "../app/providers/GoogleProvider";
+import ProviderSuccess from "../app/providers/ProviderSuccess";
+import Account from "../screens/Account";
+import Search from "../screens/Search";
 
 const router = createBrowserRouter([
     {
@@ -20,11 +24,15 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "search",
-                        element: <Home />,
+                        element: <Search />,
                     },
                     {
                         path: "playlists",
                         element: <Home />,
+                    },
+                    {
+                        path: "account",
+                        element: <Account />,
                     },
                 ],
             },
@@ -35,6 +43,14 @@ const router = createBrowserRouter([
             {
                 path: "app/register",
                 element: <Register />,
+            },
+            {
+                path: "app/login/google/twojastara",
+                element: <GoogleProvider />,
+            },
+            {
+                path: "app/login/provider/success",
+                element: <ProviderSuccess />,
             },
         ],
     },

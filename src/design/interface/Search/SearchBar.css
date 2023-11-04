@@ -1,0 +1,37 @@
+.search-bar-input {
+    border: 0;
+    background-color: transparent;
+    outline: 0;
+
+    flex: 1;
+
+    font-family: Lexend;
+    font-size: 18px;
+}
+
+.search-bar-input::placeholder {
+    color: #cac4ce;
+}
+
+.search-bar-container {
+    background-color: #382e2e;
+
+    display: flex;
+
+    align-items: center;
+
+    min-width: 360px;
+    max-width: 720px;
+
+    min-height: 56px;
+    height: 56px;
+
+    border-radius: 28px;
+
+    padding: 0 16px 0 4px;
+    gap: 4px;
+}
+
+.search-bar-icon {
+    font-size: 24px;
+}

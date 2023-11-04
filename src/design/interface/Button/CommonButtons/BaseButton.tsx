@@ -4,7 +4,7 @@ import "./BaseButton.css";
 
 const BaseButton = ({ title, icon, ...props }: BaseButtonProps) => {
     const ref = useRef(null);
-    const ripples = useRipple(ref);
+    const [ripples, invokeRipple] = useRipple(ref);
 
     return (
         <button
@@ -15,8 +15,14 @@ const BaseButton = ({ title, icon, ...props }: BaseButtonProps) => {
             }}
             {...props}
             ref={ref}
+            onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                invokeRipple(e);
+                props.onClick?.(e);
+            }}
         >
-            {ripples}
+            {ripples.ripples}
             {icon && (
                 <i
                     className={`base-button-icon ${icon}`}

@@ -1,6 +1,21 @@
-import { app, BrowserWindow, ipcMain, MessageBoxOptions } from "electron";
+import {
+    app,
+    BrowserWindow,
+    ipcMain,
+    MessageBoxOptions,
+    shell,
+} from "electron";
 import { dialog } from "electron";
 import path from "node:path";
+import {
+    DownloadConfigMain,
+    DownloadFileHandler,
+} from "../src/services/download/DownloadIpcMain";
+import {
+    GET_APP_PATH_CHANNEL,
+    GET_PATH_CHANNEL,
+    PathTypes,
+} from "../src/services/path/PathIpcMain";
 
 // The built directory structure
 //
@@ -95,7 +110,64 @@ app.whenReady().then(() => {
         }
     });
 
+    ipcMain.handle("signInWithGoogle", () => {
+        // shell.openExternal(path.join("../google.html"));
+
+        const testWin = new BrowserWindow({
+            webPreferences: {
+                preload: path.join(__dirname, "preload.js"),
+                // contextIsolation: false,
+                nodeIntegration: true,
+                sandbox: false,
+                // enableRemoteModule: true,
+                // devTools: true
+            },
+        });
+
+        if (VITE_DEV_SERVER_URL) {
+            testWin.loadURL(
+                `${VITE_DEV_SERVER_URL}app/login/google/twojastara`
+            );
+        }
+        // } else {
+        //     testWin.loadFile(path.join(process.env.DIST, "index.html"));
+        // }
+    });
+
     createWindow();
+
+    ipcMain.handle("downloadFile", (_, url: string) => {
+        win?.webContents.session.downloadURL(url);
+    });
+
+    ipcMain.handle("downloadUrl", (_, configJSON: string) => {
+        const config = JSON.parse(configJSON) as DownloadConfigMain;
+        DownloadFileHandler(win, app, config);
+
+        // app.getPath
+    });
+
+    ipcMain.handle(GET_PATH_CHANNEL, (_, type: PathTypes) => {
+        return app.getPath(type);
+    });
+
+    ipcMain.handle(GET_APP_PATH_CHANNEL, () => {
+        return app.getAppPath();
+    });
+
+    // win?.webContents.session.on("will-download", (_, item, __) => {
+    //     // item.setSavePath("/tmp/test.aac");
+    //     const filename = path.parse(item.getFilename()).name + ".aac";
+    //     const filePath = path.join(app.getPath("downloads"), filename);
+    //     item.setSavePath(filePath);
+
+    //     item.once("done", (event, state) => {
+    //         if (state === "completed") {
+    //             shell.showItemInFolder(filePath);
+    //         }
+    //     });
+    // });
+    // win?.webContents.session.setPermissionRequestHandler()
 });
 
 ipcMain.on("minimizeWindow", () => {

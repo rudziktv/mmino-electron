@@ -1,0 +1,9 @@
+.divider {
+    border: 1px solid #3e3843;
+    margin: 0;
+}
+
+.divider-list-empty {
+    font-size: 18px;
+    color: #cac4ce;
+}

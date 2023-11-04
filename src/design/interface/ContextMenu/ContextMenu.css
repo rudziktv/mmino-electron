@@ -1,0 +1,46 @@
+.context-menu-content {
+    position: relative;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.context-menu-content.active > .context-menu {
+    scale: 1;
+    opacity: 1;
+}
+
+.context-menu-trigger:hover {
+    cursor: pointer;
+}
+
+.context-menu {
+    bottom: 0;
+    right: 0;
+    transform: translateY(100%);
+    position: absolute;
+
+    border-radius: 4px;
+
+    z-index: 2;
+
+    /* z-index: 333; */
+    /* z-index: 999; */
+
+    min-width: 112px;
+    width: max-content;
+    max-width: 280px;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 8px 0;
+    background-color: #382e2e;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+
+    scale: 0;
+    opacity: 0;
+
+    transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}

@@ -1,11 +1,8 @@
 "use strict";
 const electron = require("electron");
+const GET_PATH_CHANNEL = "getPath";
+const GET_APP_PATH_CHANNEL = "getAppPath";
 electron.contextBridge.exposeInMainWorld("ipcRenderer", withPrototype(electron.ipcRenderer));
-electron.contextBridge.exposeInMainWorld("electronAPI", {
-  send: (channel, data) => {
-    electron.ipcRenderer.send(channel, data);
-  }
-});
 function withPrototype(obj) {
   const protos = Object.getPrototypeOf(obj);
   for (const [key, value] of Object.entries(protos)) {
@@ -107,4 +104,32 @@ electron.contextBridge.exposeInMainWorld("dialogAPI", {
 electron.contextBridge.exposeInMainWorld("interfaceAPI", {
   minimizeApp: () => electron.ipcRenderer.invoke("minimizeWindow"),
   maximizeApp: () => electron.ipcRenderer.invoke("maximizeWindow")
+});
+electron.contextBridge.exposeInMainWorld("supabaseAPI", {
+  signInWithGoogle: () => electron.ipcRenderer.invoke("signInWithGoogle"),
+  signInWithFacebook: () => electron.ipcRenderer.invoke("signInWithFacebook"),
+  signInWithSpotify: () => electron.ipcRenderer.invoke("signInWithSpotify"),
+  signInWithDiscord: () => electron.ipcRenderer.invoke("signInWithDiscord")
+});
+electron.contextBridge.exposeInMainWorld("restAPI", {
+  downloadFile: (url) => electron.ipcRenderer.invoke("downloadFile", url)
+});
+electron.contextBridge.exposeInMainWorld("downloadAPI", {
+  downloadUrl: (config) => {
+    const { url, downloadOptions, callback, directory } = config;
+    const eventChannel = `downloadUrl-${url}`;
+    electron.ipcRenderer.invoke(
+      "downloadUrl",
+      JSON.stringify({ url, downloadOptions, eventChannel, directory })
+      // config.downloadOptions
+    );
+    electron.ipcRenderer.on(eventChannel, (event, item) => {
+      alert(eventChannel);
+      callback(item);
+    });
+  }
+});
+electron.contextBridge.exposeInMainWorld("pathAPI", {
+  getPath: async (type) => await electron.ipcRenderer.invoke(GET_PATH_CHANNEL, type),
+  getAppPath: async () => await electron.ipcRenderer.invoke(GET_APP_PATH_CHANNEL, "appPath")
 });

@@ -1,61 +1,60 @@
-import { useEffect, useState } from "react";
 import NavigationRail from "../design/interface/NavigationRail/NavigationRail";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import "./AppRail.css";
+import PlayerContainer from "../components/Player/Player";
+import { useRef, useState } from "react";
 
 const AppRail = () => {
-    const [currentPage, setCurrentPage] = useState(0);
     const navigate = useNavigate();
+    const location = useLocation();
 
-    useEffect(() => {
-        switch (currentPage) {
-            case 0:
-                navigate("/app/main/home");
-                break;
-            case 1:
-                navigate("/app/main/search");
-                break;
-            case 2:
-                navigate("/app/main/playlists");
-                break;
-        }
-    }, [currentPage]);
+    const [audioSource, setAudioSource] = useState("");
+    const audioRef = useRef<HTMLAudioElement>(null);
 
     return (
         <>
             <NavigationRail
-                currentIndex={currentPage}
+                currentId={location.pathname}
                 buttons={[
                     {
+                        id: "/app/main/home",
                         label: "Home",
                         icon: "ri-home-line",
                         activeIcon: "ri-home-fill",
                         onClick: () => {
-                            setCurrentPage(0);
+                            navigate("/app/main/home");
                         },
                     },
                     {
+                        id: "/app/main/search",
                         label: "Search",
                         icon: "ri-search-2-line",
                         activeIcon: "ri-search-2-fill",
                         onClick: () => {
-                            setCurrentPage(1);
+                            navigate("/app/main/search");
                         },
                     },
                     {
+                        id: "/app/main/playlists",
                         label: "Playlists",
                         icon: "ri-play-list-line",
                         activeIcon: "ri-play-list-fill",
                         onClick: () => {
-                            setCurrentPage(2);
+                            navigate("/app/main/playlists");
                         },
                     },
                 ]}
             />
 
-            <section id="screen">
-                <Outlet />
-            </section>
+            <PlayerContainer
+                src={audioSource}
+                setSrc={setAudioSource}
+                audioRef={audioRef}
+            >
+                <section id="screen">
+                    <Outlet />
+                </section>
+            </PlayerContainer>
         </>
     );
 };

@@ -1,0 +1,42 @@
+.filter-chip {
+    min-height: 32px;
+    height: 32px;
+    width: fit-content;
+
+    padding: 0 8px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 8px;
+    border: 1px solid #9b90a2;
+
+    transition: 0.3s;
+}
+
+.filter-chip-icon {
+    font-size: 18px;
+}
+
+.filter-chip-label {
+    margin: 0 8px;
+}
+
+.filter-chip.disabled {
+    opacity: 0.5;
+}
+
+.filter-chip.selected {
+    color: #e1dee3;
+    background-color: #242038;
+    border-color: #242038;
+}
+
+.filter-chip.disabled.selected {
+    background-color: #433737;
+}
+
+.filter-chip-clear:hover {
+    cursor: pointer;
+}
