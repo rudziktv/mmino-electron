@@ -22,7 +22,7 @@ const BaseButton = ({ title, icon, ...props }: BaseButtonProps) => {
                 props.onClick?.(e);
             }}
         >
-            {ripples.ripples}
+            {ripples}
             {icon && (
                 <i
                     className={`base-button-icon ${icon}`}

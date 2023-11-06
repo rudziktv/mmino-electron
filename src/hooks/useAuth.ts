@@ -5,13 +5,17 @@ const useAuth = () => {
     const [loggedIn, setLoggedIn] = useState(false);
 
     useEffect(() => {
-        async () => {
+        const LoginCheck = async () => {
             const { data } = await supabase.auth.getUser();
+            // console.log("login-check:", data);
             setLoggedIn(data.user != null);
         };
 
-        const callback = supabase.auth.onAuthStateChange((_, session) => {
-            setLoggedIn(session != null);
+        LoginCheck();
+
+        const callback = supabase.auth.onAuthStateChange((event, session) => {
+            setLoggedIn(session != null || event == "SIGNED_IN");
+            // console.log("callback-auth:", event, session);
         });
 
         return () => {

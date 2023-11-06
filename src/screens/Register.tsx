@@ -13,6 +13,7 @@ import LoadingModal from "../design/interface/LoadingModal/LoadingModal";
 import RegisterModal from "../components/RegisterModal";
 import ErrorModal from "../components/ErrorModal";
 import { AuthError } from "@supabase/supabase-js";
+import { LOGIN_PATH } from "../router/Paths";
 
 const Register = () => {
     const [email, setEmail] = useState("");
@@ -110,7 +111,7 @@ const Register = () => {
                     title="Already have an account? Sign in"
                     icon="ri-user-line"
                     onClick={() => {
-                        navigate("/app/login");
+                        navigate(LOGIN_PATH);
                     }}
                 />
             </div>

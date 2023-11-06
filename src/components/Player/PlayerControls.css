@@ -28,6 +28,20 @@
     gap: 12px;
 }
 
+#player-controls-bottom > span {
+    width: 32px;
+    font-size: 14px;
+    font-weight: 300;
+}
+
+#player-controls-bottom > #player-controls-current-time {
+    text-align: right;
+}
+
+#player-controls-bottom > #player-controls-duration {
+    text-align: left;
+}
+
 #player-controls-left {
     display: flex;
     align-items: center;
@@ -37,6 +51,11 @@
 
 #player-controls-right {
     width: 256px;
+
+    display: flex;
+    align-items: center;
+    /* justify-content: flex-end; */
+    gap: 12px;
 }
 
 #player-controls-info {

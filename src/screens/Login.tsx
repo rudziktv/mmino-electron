@@ -13,6 +13,7 @@ import BaseIconButton from "../design/interface/Button/IconButtons/BaseIconButto
 import Tooltip from "../design/interface/Tooltip/Tooltip";
 import { signInWithGoogle } from "../../electron/ipc";
 import useAuth from "../hooks/useAuth";
+import { SIGNUP_PATH } from "../router/Paths";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -120,7 +121,7 @@ const Login = () => {
                     title="Don't have an account? Sign up"
                     icon="ri-user-add-line"
                     onClick={() => {
-                        navigate("/app/register");
+                        navigate(SIGNUP_PATH);
                     }}
                 />
 
@@ -162,10 +163,10 @@ const Login = () => {
                     </Tooltip>
                 </div>
 
-                <TextButton
+                {/* <TextButton
                     title="Go back to menu"
                     onClick={() => navigate("/app/main")}
-                />
+                /> */}
 
                 {/* <SegmentedButtons
                     activeValue={gender}

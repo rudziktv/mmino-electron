@@ -9,6 +9,10 @@ const Slider = (props: SliderProps) => {
         // e.preventDefault();
         // console.log("down");
 
+        if (props.disabled) {
+            return;
+        }
+
         document.addEventListener("mousemove", onMouseMove);
         document.addEventListener("mouseup", onMouseUp);
     };
@@ -54,7 +58,10 @@ const Slider = (props: SliderProps) => {
     };
 
     return (
-        <div className="slider-container" ref={ref}>
+        <div
+            className={`slider-container ${props.disabled && "disabled"}`}
+            ref={ref}
+        >
             <div className="slider-track" />
             <div
                 className="slider-track slider-track-active"
@@ -77,7 +84,7 @@ const Slider = (props: SliderProps) => {
 export interface SliderProps {
     value: number;
     setValue?: (value: number) => void;
-
+    disabled?: boolean;
     label?: string;
 }
 

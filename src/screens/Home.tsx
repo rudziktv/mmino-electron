@@ -18,6 +18,8 @@ import usePlayer from "../hooks/usePlayer";
 import LinearProgressIndicator from "../design/interface/LinearProgressIndicator/LinearProgressIndicator";
 import FilledCard from "../design/interface/Card/FilledCard";
 import Slider from "../design/interface/Slider/Slider";
+import { formatSeconds } from "../utils/TimeFormatter";
+import LastPlayedItem from "../components/LastPlayedItem/LastPlayedItem";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -76,7 +78,7 @@ const Home = () => {
                             onClick: async () => {
                                 setLoading(true);
                                 await supabase.auth.signOut();
-                                navigate("/app/login");
+                                navigate("/app/auth/login");
                                 setLoading(false);
                             },
                         },
@@ -86,22 +88,38 @@ const Home = () => {
                 </ContextMenu>
             </header>
 
-            <FilledCard id="home-main-view">
-                <span>Home</span>
+            <div id="home-main-container">
+                <FilledCard id="home-last-played">
+                    <span id="home-last-played-title">Last played</span>
+                    <div id="home-last-played-list" className="small-scrollbar">
+                        <LastPlayedItem />
+                        <LastPlayedItem />
+                        <LastPlayedItem />
+                        <LastPlayedItem />
+                        <LastPlayedItem />
+                        <LastPlayedItem />
+                        <LastPlayedItem />
+                        <LastPlayedItem />
+                    </div>
+                </FilledCard>
 
-                <span>{String(auth)}</span>
+                <FilledCard id="home-main-view">
+                    <span>Home</span>
 
-                <OutlinedTextInput
-                    placeholder="Enter URL"
-                    onChangeText={setUrl}
-                    value={url}
-                    backgroundColor="#221c1c"
-                />
+                    <span>{String(auth)}</span>
 
-                {/* <LinearProgressIndicator progress={100} /> */}
+                    <OutlinedTextInput
+                        placeholder="Enter URL"
+                        onChangeText={setUrl}
+                        value={url}
+                        backgroundColor="#221c1c"
+                    />
 
-                <Slider value={slider} setValue={setSlider} />
-            </FilledCard>
+                    {/* <LinearProgressIndicator progress={100} /> */}
+
+                    <Slider value={slider} setValue={setSlider} />
+                </FilledCard>
+            </div>
 
             <PlayerControls />
 

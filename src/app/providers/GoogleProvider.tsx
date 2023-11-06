@@ -9,7 +9,7 @@ const GoogleProvider = () => {
         await supabase.auth.signInWithOAuth({
             provider: "google",
             options: {
-                redirectTo: `${window.location.origin}/app/login/provider/success`,
+                redirectTo: `${window.location.origin}/app/auth/login/provider/success`,
             },
         });
     };
@@ -24,7 +24,7 @@ const GoogleProvider = () => {
         }
     }, [auth]);
 
-    return <></>;
+    return <>Connecting, don't close the window.</>;
 };
 
 export default GoogleProvider;

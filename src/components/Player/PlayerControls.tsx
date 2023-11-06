@@ -16,6 +16,7 @@ const PlayerControls = (props: PlayerControlsProps) => {
     const audioRef = player.audioRef;
 
     const [progress, setProgress] = useState(0);
+    const [volume, setVolume] = useState(0);
 
     const [isPlaying, setIsPlaying] = useState(
         player.audioRef?.current?.paused != null
@@ -84,8 +85,8 @@ const PlayerControls = (props: PlayerControlsProps) => {
             return;
         }
 
-        console.log(navigator.mediaSession);
-        console.log(navigator.mediaCapabilities);
+        // console.log(navigator.mediaSession);
+        // console.log(navigator.mediaCapabilities);
 
         navigator.mediaSession.setActionHandler("play", PlayPause);
         navigator.mediaSession.setActionHandler("pause", PlayPause);
@@ -135,18 +136,31 @@ const PlayerControls = (props: PlayerControlsProps) => {
                     <BaseIconButton icon="ri-skip-forward-line" />
                 </div>
                 <div id="player-controls-bottom">
-                    <span>
+                    <span id="player-controls-current-time">
                         {formatSeconds(audioRef?.current?.currentTime || 0)}
                     </span>
                     {/* <LinearProgressIndicator progress={progress} /> */}
-                    <Slider value={progress} setValue={setProgress} />
-                    <span>
+                    <Slider
+                        value={progress}
+                        setValue={setProgress}
+                        label={formatSeconds(
+                            (progress * (audioRef?.current?.duration || 0)) /
+                                100
+                        )}
+                    />
+                    <span id="player-controls-duration">
                         {formatSeconds(audioRef?.current?.duration || 0)}
                     </span>
                 </div>
             </div>
             <div id="player-controls-right">
+                <BaseIconButton icon="ri-play-list-2-line" />
                 <BaseIconButton icon="ri-volume-mute-line" />
+                <Slider
+                    value={volume}
+                    setValue={setVolume}
+                    label={volume.toFixed()}
+                />
             </div>
         </div>
     );

@@ -2,14 +2,27 @@ import NavigationRail from "../design/interface/NavigationRail/NavigationRail";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import "./AppRail.css";
 import PlayerContainer from "../components/Player/Player";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import useAuth from "../hooks/useAuth";
+import { MAIN_HOME_PATH, MAIN_SEARCH_PATH } from "./Paths";
 
 const AppRail = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const auth = useAuth();
 
     const [audioSource, setAudioSource] = useState("");
     const audioRef = useRef<HTMLAudioElement>(null);
+
+    // useEffect(() => {
+    //     console.log(location.pathname);
+    //     console.log(auth);
+
+    //     if (!location.pathname.includes("/app/auth") && !auth) {
+    //         console.log(location);
+    //         // navigate("/app/auth/login");
+    //     }
+    // }, [auth]);
 
     return (
         <>
@@ -22,7 +35,7 @@ const AppRail = () => {
                         icon: "ri-home-line",
                         activeIcon: "ri-home-fill",
                         onClick: () => {
-                            navigate("/app/main/home");
+                            navigate(MAIN_HOME_PATH);
                         },
                     },
                     {
@@ -31,7 +44,7 @@ const AppRail = () => {
                         icon: "ri-search-2-line",
                         activeIcon: "ri-search-2-fill",
                         onClick: () => {
-                            navigate("/app/main/search");
+                            navigate(MAIN_SEARCH_PATH);
                         },
                     },
                     {

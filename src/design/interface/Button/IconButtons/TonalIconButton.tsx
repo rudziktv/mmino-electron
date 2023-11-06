@@ -4,7 +4,7 @@ import "./TonalIconButton.css";
 const TonalIconButton = (props: BaseIconButtonProps) => {
     return (
         <BaseIconButton
-            className={`filled-icon-button ${props.className}`}
+            className={`tonal-icon-button ${props.className}`}
             {...props}
         />
     );

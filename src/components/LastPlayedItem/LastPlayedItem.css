@@ -1,0 +1,74 @@
+.last-played-item {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    padding: 6px;
+
+    width: 280px;
+
+    gap: 12px;
+
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    border-radius: 8px;
+}
+
+.last-played-item::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    /* background-color: green; */
+
+    transition: 0.2s;
+}
+
+.last-played-item:hover::after {
+    background-color: #ffffff11 !important;
+}
+
+.last-played-item-cover {
+    width: 64px;
+    height: 64px;
+
+    background-color: #242038;
+    border-radius: 8px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 24px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.last-played-item-cover-play {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    /* background-color: #ffffff11; */
+    opacity: 0;
+    scale: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.last-played-item:hover .last-played-item-cover-play {
+    opacity: 1;
+    scale: 1;
+}
+
+.last-played-item-cover:hover .last-played-item-cover-play {
+    opacity: 1;
+    scale: 1;
+}

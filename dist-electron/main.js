@@ -50,7 +50,9 @@ function createWindow() {
       // enableRemoteModule: true,
       // devTools: true
     },
-    titleBarStyle: "hidden"
+    titleBarStyle: "hidden",
+    minWidth: 1e3,
+    minHeight: 500
     // titleBarOverlay: {
     //     color: "#00000000",
     //     symbolColor: "#ffffff",
@@ -111,7 +113,7 @@ electron.app.whenReady().then(() => {
     });
     if (VITE_DEV_SERVER_URL) {
       testWin.loadURL(
-        `${VITE_DEV_SERVER_URL}app/login/google/twojastara`
+        `${VITE_DEV_SERVER_URL}app/auth/login/google/twojastara`
       );
     }
   });

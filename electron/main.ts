@@ -47,6 +47,8 @@ function createWindow() {
             // devTools: true
         },
         titleBarStyle: "hidden",
+        minWidth: 1000,
+        minHeight: 500,
         // titleBarOverlay: {
         //     color: "#00000000",
         //     symbolColor: "#ffffff",
@@ -126,7 +128,7 @@ app.whenReady().then(() => {
 
         if (VITE_DEV_SERVER_URL) {
             testWin.loadURL(
-                `${VITE_DEV_SERVER_URL}app/login/google/twojastara`
+                `${VITE_DEV_SERVER_URL}app/auth/login/google/twojastara`
             );
         }
         // } else {

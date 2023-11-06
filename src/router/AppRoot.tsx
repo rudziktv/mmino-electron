@@ -8,6 +8,8 @@ import GoogleProvider from "../app/providers/GoogleProvider";
 import ProviderSuccess from "../app/providers/ProviderSuccess";
 import Account from "../screens/Account";
 import Search from "../screens/Search";
+import { useEffect } from "react";
+import useAuth from "../hooks/useAuth";
 
 const router = createBrowserRouter([
     {
@@ -37,26 +39,42 @@ const router = createBrowserRouter([
                 ],
             },
             {
-                path: "app/login",
+                path: "app/auth/login",
                 element: <Login />,
             },
             {
-                path: "app/register",
+                path: "app/auth/register",
                 element: <Register />,
             },
-            {
-                path: "app/login/google/twojastara",
-                element: <GoogleProvider />,
-            },
-            {
-                path: "app/login/provider/success",
-                element: <ProviderSuccess />,
-            },
         ],
+    },
+    {
+        path: "app/auth/login/google/twojastara",
+        element: <GoogleProvider />,
+    },
+    {
+        path: "app/auth/login/provider/",
+        element: <GoogleProvider />,
+    },
+    {
+        path: "app/auth/login/provider/success",
+        element: <ProviderSuccess />,
     },
 ]);
 
 const AppRoot = () => {
+    const auth = useAuth();
+
+    useEffect(() => {
+        console.log(location.pathname);
+        console.log(auth);
+
+        if (!location.pathname.includes("/app/auth") && !auth) {
+            console.log(location);
+            // navigate("/app/auth/login");
+        }
+    }, [auth]);
+
     return <RouterProvider router={router} />;
 };
 

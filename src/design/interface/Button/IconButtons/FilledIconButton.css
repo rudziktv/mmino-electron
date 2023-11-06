@@ -1,16 +1,16 @@
-.tonal-icon-button {
-    background-color: #242038;
-    color: #cac4ce;
+.filled-icon-button {
+    background-color: #9067c6;
+    color: #242038;
 
     /* color: rbga(255, 255, 255, 1); */
 }
 
-.tonal-icon-button.toggable {
+.filled-icon-button.toggable {
     background-color: #382e2e;
     color: #9067c6;
 }
 
-.tonal-icon-button.toggled {
+.filled-icon-button.toggled {
     background-color: #9067c6;
     color: #242038;
 }
