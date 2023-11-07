@@ -14,6 +14,10 @@
     border-radius: 8px;
 }
 
+.last-played-item:hover {
+    cursor: pointer;
+}
+
 .last-played-item::after {
     content: "";
     position: absolute;
@@ -45,6 +49,8 @@
     position: relative;
     overflow: hidden;
     z-index: 1;
+
+    background-size: contain;
 }
 
 .last-played-item-cover-play {
@@ -71,4 +77,21 @@
 .last-played-item-cover:hover .last-played-item-cover-play {
     opacity: 1;
     scale: 1;
+}
+
+.last-played-item-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.last-played-item-title {
+    font-size: 18px;
+}
+
+.last-played-item-artist {
+    font-size: 14px;
+    font-weight: 300;
+    color: #9b90a2;
 }
