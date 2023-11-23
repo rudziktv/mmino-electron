@@ -16,6 +16,10 @@ import {
     GET_PATH_CHANNEL,
     PathTypes,
 } from "../src/services/path/PathIpcMain";
+import {
+    OPEN_EXTERNAL_CHANNEL,
+    openExternalMain,
+} from "../src/services/shell/ShellIpcMain";
 
 // The built directory structure
 //
@@ -110,6 +114,10 @@ app.whenReady().then(() => {
         } else {
             win?.maximize();
         }
+    });
+
+    ipcMain.handle(OPEN_EXTERNAL_CHANNEL, (_, url) => {
+        openExternalMain(shell, url);
     });
 
     ipcMain.handle("signInWithGoogle", () => {

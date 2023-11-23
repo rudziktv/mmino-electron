@@ -4,13 +4,24 @@ import useRipple from "../../hooks/useRipple";
 import "./SearchTrackItem.css";
 import ContextMenu from "../../design/interface/ContextMenu/ContextMenu";
 import { supabase } from "../../supabase/client";
+import { openExternal } from "../../services/shell/ShellIpcRenderer";
 
 const SearchTrackItem = (props: SearchTrackItemProps) => {
     const ref = useRef(null);
     const [ripples, invokeRipple] = useRipple(ref);
 
     const getFormats = async () => {
-        const response = await supabase.functions.invoke("get-video-formats", {
+        // const response = await supabase.functions.invoke("get-video-formats", {
+        //     body: {
+        //         video_id: props.id,
+        //     },
+        // });
+
+        // if (response.data) {
+        //     console.log(response.data);
+        // }
+
+        const response = await supabase.functions.invoke("get-video-source", {
             body: {
                 video_id: props.id,
             },
@@ -18,7 +29,15 @@ const SearchTrackItem = (props: SearchTrackItemProps) => {
 
         if (response.data) {
             console.log(response.data);
+            openExternal(response.data.message);
         }
+    };
+
+    const star = async () => {
+        const response = await supabase.from("starred_tracks").insert({
+            user_id: (await supabase.auth.getUser()).data.user?.id,
+            track_id: props.id,
+        });
     };
 
     return (
@@ -56,13 +75,15 @@ const SearchTrackItem = (props: SearchTrackItemProps) => {
             </div>
 
             <div className="search-track-item-actions">
-                <BaseIconButton icon="ri-star-line" />
+                <BaseIconButton icon="ri-star-line" onClick={star} />
                 <BaseIconButton icon="ri-download-line" onClick={getFormats} />
                 <ContextMenu
                     buttons={[
                         {
                             title: "YouTube",
                             leadingIcon: "ri-youtube-fill",
+                            onClick: () =>
+                                openExternal(props.youtube_url || ""),
                         },
                         {
                             title: "Spotify",
@@ -83,6 +104,7 @@ export interface SearchTrackItemProps {
     artists?: string;
     thumbnail?: string;
     durationFormatted?: string;
+    youtube_url?: string;
 }
 
 export default SearchTrackItem;

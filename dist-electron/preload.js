@@ -133,3 +133,6 @@ electron.contextBridge.exposeInMainWorld("pathAPI", {
   getPath: async (type) => await electron.ipcRenderer.invoke(GET_PATH_CHANNEL, type),
   getAppPath: async () => await electron.ipcRenderer.invoke(GET_APP_PATH_CHANNEL, "appPath")
 });
+electron.contextBridge.exposeInMainWorld("shellAPI", {
+  openExternal: (url) => electron.ipcRenderer.invoke("openExternal", url)
+});

@@ -35,6 +35,10 @@ const DownloadFileHandler = (window, app, config) => {
 };
 const GET_PATH_CHANNEL = "getPath";
 const GET_APP_PATH_CHANNEL = "getAppPath";
+const openExternalMain = (shell, url) => {
+  shell.openExternal(url);
+};
+const OPEN_EXTERNAL_CHANNEL = "openExternal";
 process.env.DIST = path.join(__dirname, "../dist");
 process.env.VITE_PUBLIC = electron.app.isPackaged ? process.env.DIST : path.join(process.env.DIST, "../public");
 let win;
@@ -99,6 +103,9 @@ electron.app.whenReady().then(() => {
     } else {
       win == null ? void 0 : win.maximize();
     }
+  });
+  electron.ipcMain.handle(OPEN_EXTERNAL_CHANNEL, (_, url) => {
+    openExternalMain(electron.shell, url);
   });
   electron.ipcMain.handle("signInWithGoogle", () => {
     const testWin = new electron.BrowserWindow({

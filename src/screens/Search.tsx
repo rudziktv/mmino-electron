@@ -5,8 +5,6 @@ import ListDivider from "../design/interface/ListDivider/ListDivider";
 import SearchTrackItem from "../components/SearchTrackItem/SearchTrackItem";
 import { supabase } from "../supabase/client";
 import CircularProgressIndicator from "../design/interface/ProgressIndicator/CircularProgressIndicator/CircularProgressIndicator";
-import LinearProgressIndicator from "../design/interface/LinearProgressIndicator/LinearProgressIndicator";
-import FilterChip from "../design/interface/Chip/FilterChip";
 
 const Search = () => {
     const [search, setSearch] = useState("");
@@ -88,6 +86,7 @@ const Search = () => {
                                 title={item.title}
                                 artists={item.channel.name}
                                 thumbnail={item.thumbnail.url}
+                                youtube_url={item.url}
                                 durationFormatted={item.duration_formatted}
                             />
                         ))}
@@ -109,6 +108,7 @@ interface SearchResult {
     channel: {
         name: string;
     };
+    url: string;
 }
 
 export default Search;

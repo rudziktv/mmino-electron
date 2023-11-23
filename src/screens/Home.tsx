@@ -1,24 +1,17 @@
 import { useNavigate } from "react-router-dom";
-import TextButton from "../design/interface/Button/CommonButtons/TextButton";
 import useAuth from "../hooks/useAuth";
 import { supabase } from "../supabase/client";
 import "../styles/Home.css";
 import Avatar from "../design/interface/Avatar/Avatar";
 import ContextMenu from "../design/interface/ContextMenu/ContextMenu";
-import ContextMenuItem from "../design/interface/ContextMenu/ContextMenuItem";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useLodaing from "../hooks/useLoading";
 import SideModal from "../design/interface/SideSheets/SideModal";
-import Card from "../design/interface/Card/Card";
 import NotificationItem from "../components/NotificationItem/NotificationItem";
-import Icon from "../design/interface/Icon/Icon";
 import PlayerControls from "../components/Player/PlayerControls";
 import OutlinedTextInput from "../design/interface/TextInput/OutlinedTextInput";
-import usePlayer from "../hooks/usePlayer";
-import LinearProgressIndicator from "../design/interface/LinearProgressIndicator/LinearProgressIndicator";
 import FilledCard from "../design/interface/Card/FilledCard";
 import Slider from "../design/interface/Slider/Slider";
-import { formatSeconds } from "../utils/TimeFormatter";
 import LastPlayedItem from "../components/LastPlayedItem/LastPlayedItem";
 
 const Home = () => {
@@ -92,7 +85,7 @@ const Home = () => {
                 <FilledCard id="home-last-played">
                     <span id="home-last-played-title">Last played</span>
                     <div id="home-last-played-list" className="small-scrollbar">
-                        <LastPlayedItem />
+                        <LastPlayedItem thumbnail="https://i1.sndcdn.com/artworks-HwXGFlkUDOAUhYiS-Btndew-t500x500.jpg" />
                         <LastPlayedItem />
                         <LastPlayedItem />
                         <LastPlayedItem />

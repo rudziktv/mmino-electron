@@ -193,3 +193,7 @@ contextBridge.exposeInMainWorld("pathAPI", {
     getAppPath: async () =>
         (await ipcRenderer.invoke(GET_APP_PATH_CHANNEL, "appPath")) as string,
 });
+
+contextBridge.exposeInMainWorld("shellAPI", {
+    openExternal: (url: string) => ipcRenderer.invoke("openExternal", url),
+});

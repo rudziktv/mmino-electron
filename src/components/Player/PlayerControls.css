@@ -4,6 +4,7 @@
     align-items: center;
 
     padding: 12px 24px;
+    gap: 24px;
 }
 
 #player-controls-mid {
@@ -11,7 +12,6 @@
     flex-direction: column;
     flex: 1;
     max-width: 720px;
-    gap: 12px;
 }
 
 #player-controls-top {
