@@ -3,15 +3,15 @@ import usePlayer from "../../hooks/usePlayer";
 import "./PlayerControls.css";
 import BaseIconButton from "../../design/interface/Button/IconButtons/BaseIconButton";
 import TonalIconButton from "../../design/interface/Button/IconButtons/TonalIconButton";
-import { supabase } from "../../supabase/client";
-import { downloadFile } from "../../../electron/ipc";
-import { downloadUrl } from "../../services/download/DownloadIpcRenderer";
-import { getAppPath, getPath } from "../../services/path/PathIpcRenderer";
-import LinearProgressIndicator from "../../design/interface/LinearProgressIndicator/LinearProgressIndicator";
+// import { supabase } from "../../supabase/client";
+// import { downloadFile } from "../../../electron/ipc";
+// import { downloadUrl } from "../../services/download/DownloadIpcRenderer";
+// import { getAppPath, getPath } from "../../services/path/PathIpcRenderer";
+// import LinearProgressIndicator from "../../design/interface/LinearProgressIndicator/LinearProgressIndicator";
 import Slider from "../../design/interface/Slider/Slider";
 import { formatSeconds } from "../../utils/TimeFormatter";
 
-const PlayerControls = (props: PlayerControlsProps) => {
+const PlayerControls = ({}: PlayerControlsProps) => {
     const player = usePlayer();
     const audioRef = player.audioRef;
 
@@ -24,32 +24,32 @@ const PlayerControls = (props: PlayerControlsProps) => {
             : false
     );
 
-    const a = async () => {
-        console.log("supabase");
-        const { data } = await supabase.functions.invoke<{ message: string }>(
-            "get-video-source",
-            {
-                body: {
-                    video_id: "MkWDKJjhbvw",
-                },
-                method: "POST",
-            }
-        );
+    // const a = async () => {
+    //     console.log("supabase");
+    //     const { data } = await supabase.functions.invoke<{ message: string }>(
+    //         "get-video-source",
+    //         {
+    //             body: {
+    //                 video_id: "MkWDKJjhbvw",
+    //             },
+    //             method: "POST",
+    //         }
+    //     );
 
-        if (data) {
-            // downloadFile(data.message);
-            // downloadUrl({
-            //     url: "https://file-examples.com/storage/fe1734aff46541d35a76822/2017/02/file-sample_100kB.doc",
-            //     callback(item) {
-            //         item.once("done", () => {
-            //             alert("done");
-            //         });
-            //     },
-            // });
+    //     if (data) {
+    //         // downloadFile(data.message);
+    //         // downloadUrl({
+    //         //     url: "https://file-examples.com/storage/fe1734aff46541d35a76822/2017/02/file-sample_100kB.doc",
+    //         //     callback(item) {
+    //         //         item.once("done", () => {
+    //         //             alert("done");
+    //         //         });
+    //         //     },
+    //         // });
 
-            alert(await getPath("appData"));
-        }
-    };
+    //         alert(await getPath("appData"));
+    //     }
+    // };
 
     const PlayPause = () => {
         if (!audioRef?.current) {
@@ -58,11 +58,11 @@ const PlayerControls = (props: PlayerControlsProps) => {
 
         if (audioRef.current.paused) {
             audioRef.current.play();
-            setIsPlaying(true);
+            // setIsPlaying(true);
             navigator.mediaSession.playbackState = "playing";
         } else {
             audioRef.current.pause();
-            setIsPlaying(false);
+            // setIsPlaying(false);
             navigator.mediaSession.playbackState = "paused";
         }
 
@@ -84,9 +84,6 @@ const PlayerControls = (props: PlayerControlsProps) => {
         if (!audioRef?.current) {
             return;
         }
-
-        // console.log(navigator.mediaSession);
-        // console.log(navigator.mediaCapabilities);
 
         navigator.mediaSession.setActionHandler("play", PlayPause);
         navigator.mediaSession.setActionHandler("pause", PlayPause);
@@ -113,6 +110,9 @@ const PlayerControls = (props: PlayerControlsProps) => {
                 (audioRef.current.currentTime / audioRef.current.duration) * 100
             );
         };
+
+        audioRef.current.onpause = () => setIsPlaying(false);
+        audioRef.current.onplay = () => setIsPlaying(true);
     }, []);
 
     return (
@@ -142,11 +142,19 @@ const PlayerControls = (props: PlayerControlsProps) => {
                     {/* <LinearProgressIndicator progress={progress} /> */}
                     <Slider
                         value={progress}
-                        setValue={setProgress}
-                        label={formatSeconds(
-                            (progress * (audioRef?.current?.duration || 0)) /
-                                100
-                        )}
+                        setValue={(n) => {
+                            if (!audioRef?.current) {
+                                return;
+                            }
+                            audioRef.current.currentTime =
+                                (n * audioRef.current.duration) / 100;
+                            setProgress(n);
+                        }}
+                        label={(pos) =>
+                            formatSeconds(
+                                (pos * (audioRef?.current?.duration || 0)) / 100
+                            )
+                        }
                     />
                     <span id="player-controls-duration">
                         {formatSeconds(audioRef?.current?.duration || 0)}
@@ -159,7 +167,7 @@ const PlayerControls = (props: PlayerControlsProps) => {
                 <Slider
                     value={volume}
                     setValue={setVolume}
-                    label={volume.toFixed()}
+                    label={() => volume.toFixed()}
                 />
             </div>
         </div>

@@ -1,60 +1,86 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./Slider.css";
 
-const Slider = (props: SliderProps) => {
-    let xd = props.value;
+const Slider = ({ updateType = "onDrop", ...props }: SliderProps) => {
     const ref = useRef<HTMLDivElement>(null);
+    let xd = props.value;
+    let lastPos = 0;
+
+    const [changing, setChanging] = useState(false);
+    const [position, setPosition] = useState(changing ? lastPos : props.value);
+
+    useEffect(() => {
+        if (!changing) {
+            setPosition(props.value);
+        }
+    }, [props.value]);
 
     const onMouseDown = (_: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        // e.preventDefault();
-        // console.log("down");
-
         if (props.disabled) {
             return;
         }
 
         document.addEventListener("mousemove", onMouseMove);
         document.addEventListener("mouseup", onMouseUp);
+        setChanging(true);
     };
 
-    const onMouseUp = (_: Event) => {
-        // e.preventDefault();
-        // console.log("up");
+    const onMouseUp = (e: Event) => {
+        setChanging(false);
+        const event = e as MouseEvent;
 
+        if (updateType == "onDrop") {
+            onChange(event.movementX);
+        }
         document.removeEventListener("mousemove", onMouseMove);
         document.removeEventListener("mouseup", onMouseUp);
     };
 
     const onMouseMove = (e: Event) => {
         const event = e as MouseEvent;
-        // console.log("current:", value, "delta:", event.movementX);
-        onChange(event.movementX);
+
+        if (updateType == "onDrag") {
+            onChange(event.movementX);
+        } else if (updateType == "onDrop") {
+            onChangeV2(event.movementX);
+        }
     };
 
     const onChange = (x: number) => {
         const refWidth = ref.current?.clientWidth || 1;
-
         const delta = (x / refWidth) * 100;
-
-        // console.log(
-        //     "current:",
-        //     props.value,
-        //     "delta:",
-        //     delta,
-        //     "val+del:",
-        //     props.value + delta
-        // );
-
         xd += delta;
-        // setValue(xd);
 
-        if (xd > 100) props.setValue?.(100);
-        else if (xd < 0) props.setValue?.(0);
-        else props.setValue?.(xd);
+        if (xd > 100) {
+            setPosition(100);
+            props.setValue?.(100);
+            lastPos = 100;
+        } else if (xd < 0) {
+            setPosition(0);
+            props.setValue?.(0);
+            lastPos = 0;
+        } else {
+            setPosition(xd);
+            props.setValue?.(xd);
+            lastPos = xd;
+        }
+    };
 
-        // xd = value;
+    const onChangeV2 = (x: number) => {
+        const refWidth = ref.current?.clientWidth || 1;
+        const delta = (x / refWidth) * 100;
+        xd += delta;
 
-        // console.log("finally:", props.value, "expect:", xd);
+        if (xd > 100) {
+            setPosition(100);
+            lastPos = 100;
+        } else if (xd < 0) {
+            setPosition(0);
+            lastPos = 0;
+        } else {
+            setPosition(xd);
+            lastPos = xd;
+        }
     };
 
     return (
@@ -65,16 +91,18 @@ const Slider = (props: SliderProps) => {
             <div className="slider-track" />
             <div
                 className="slider-track slider-track-active"
-                style={{ width: `${props.value}%` }}
+                style={{ width: `${position}%` }}
             />
 
             <div
                 className="slider-thumb"
                 onMouseDown={onMouseDown}
-                style={{ left: `${props.value}%` }}
+                style={{ left: `${position}%` }}
             >
                 {props.label && (
-                    <div className="slider-thumb-label">{props.label}</div>
+                    <div className="slider-thumb-label">
+                        {props.label(position)}
+                    </div>
                 )}
             </div>
         </div>
@@ -85,7 +113,8 @@ export interface SliderProps {
     value: number;
     setValue?: (value: number) => void;
     disabled?: boolean;
-    label?: string;
+    label?: (position: number) => string;
+    updateType?: "onDrop" | "onDrag";
 }
 
 export default Slider;
