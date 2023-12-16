@@ -35,6 +35,7 @@ export interface PlayerProps {
 export interface IPlayer {
     src: string;
     setSrc: (src: string) => void;
+    // trackController
     audioRef?: React.RefObject<HTMLAudioElement>;
 }
 

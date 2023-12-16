@@ -2,7 +2,6 @@ import { App, BrowserWindow, DownloadItem, DownloadURLOptions } from "electron";
 
 const DownloadFileHandler = (
     window: BrowserWindow | null,
-    app: App,
     config: DownloadConfigMain
 ) => {
     if (window) {
@@ -11,35 +10,41 @@ const DownloadFileHandler = (
             config.downloadOptions
         );
 
-        window.webContents.session.on(
-            "will-download",
-            (_, item, webContents) => {
-                if (item.getURL() === config.url) {
-                    if (config.directory) {
-                        item.setSavePath(config.directory);
-                    }
-
-                    item.on("updated", (_, state) => {
-                        window.webContents.send(
-                            `updated-${config.eventChannel}`,
-                            2
-                        );
-
-                        item.getTotalBytes();
-                        item.getFilename();
-                    });
-
-                    item.once("done", (_, state) => {
-                        window.webContents.send(
-                            `done-${config.eventChannel}`,
-                            2
-                        );
-                    });
-
-                    // window.webContents.send(config.eventChannel, 2);
+        window.webContents.session.on("will-download", (_, item) => {
+            if (item.getURL() === config.url) {
+                if (config.directory) {
+                    item.setSavePath(config.directory);
                 }
+
+                item.on("updated", (_, state) => {
+                    const args: DownloadUpdatedArgs = {
+                        state: state,
+                        data: {
+                            receivedBytes: item.getReceivedBytes(),
+                            totalBytes: item.getTotalBytes(),
+                            filename: item.getFilename(),
+                        },
+                    };
+
+                    window.webContents.send(
+                        `updated-${config.eventChannel}`,
+                        args
+                    );
+                });
+
+                item.once("done", (_, state) => {
+                    const args: DownloadCompletedArgs = {
+                        state: state,
+                        directory: item.getSavePath(),
+                    };
+
+                    window.webContents.send(
+                        `done-${config.eventChannel}`,
+                        args
+                    );
+                });
             }
-        );
+        });
     }
 };
 
@@ -47,7 +52,7 @@ const DOWNLOAD_URL_CHANNEL = "downloadUrl";
 
 export interface DownloadConfig {
     url: string;
-    callback: DownloadCallback;
+    // callback: DownloadCallback;
     callbackOnUpdated?: DownloadUpdatedCallback;
     callbackOnCompleted?: DownloadCompletedCallback;
     directory?: string;
@@ -76,8 +81,23 @@ export type DownloadUpdatedCallback = (
     }
 ) => void;
 
+export type DownloadUpdatedArgs = {
+    state: "progressing" | "interrupted";
+    data: {
+        receivedBytes: number;
+        totalBytes: number;
+        filename: string;
+    };
+};
+
+export type DownloadCompletedArgs = {
+    state: "interrupted" | "completed" | "cancelled";
+    directory?: string;
+};
+
 export type DownloadCompletedCallback = (
-    state: "interrupted" | "completed" | "cancelled"
+    state: "interrupted" | "completed" | "cancelled",
+    directory?: string
 ) => void;
 
 export interface DownloadIpcRendererProps {

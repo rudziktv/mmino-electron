@@ -30,6 +30,7 @@
 
     padding: 0 16px 0 4px;
     gap: 4px;
+    cursor: text;
 }
 
 .search-bar-icon {

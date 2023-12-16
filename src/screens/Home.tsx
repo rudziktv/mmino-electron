@@ -13,6 +13,7 @@ import OutlinedTextInput from "../design/interface/TextInput/OutlinedTextInput";
 import FilledCard from "../design/interface/Card/FilledCard";
 import Slider from "../design/interface/Slider/Slider";
 import LastPlayedItem from "../components/LastPlayedItem/LastPlayedItem";
+import TextButton from "../design/interface/Button/CommonButtons/TextButton";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -107,6 +108,8 @@ const Home = () => {
                         value={url}
                         backgroundColor="#221c1c"
                     />
+
+                    <TextButton title="Open" />
 
                     {/* <LinearProgressIndicator progress={100} /> */}
 

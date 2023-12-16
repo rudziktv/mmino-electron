@@ -1,11 +1,21 @@
 import { IPlayer } from "../../components/Player/Player";
 import { Track } from "./Track";
+import Queue from "./TrackQueue";
 
 class TrackPlayer {
     src: string;
     setSrc: (src: string) => void;
     #audioRef?: React.RefObject<HTMLAudioElement>;
     trackQueue: Track[] = [];
+    #queue: Queue = new Queue();
+
+    public get Queue(): Queue {
+        return this.#queue;
+    }
+
+    public get AudioRef(): React.RefObject<HTMLAudioElement> | undefined {
+        return this.#audioRef;
+    }
 
     constructor(config: IPlayer) {
         this.src = config.src;
@@ -95,6 +105,12 @@ class TrackPlayer {
 
         // this.#audioRef.current.removeEventListener("ended", checkedCallback);
     }
+}
+
+export interface ITrackPlayer {
+    src: string;
+    setSrc: (src: string) => void;
+    audioRef?: React.RefObject<HTMLAudioElement>;
 }
 
 export default TrackPlayer;

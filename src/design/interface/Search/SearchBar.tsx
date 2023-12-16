@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import BaseIconButton, {
     BaseIconButtonProps,
 } from "../Button/IconButtons/BaseIconButton";
@@ -7,11 +8,18 @@ const SearchBar = ({
     leadingButton = { icon: "ri-search-line" },
     ...props
 }: SearchBarProps) => {
+    const ref = useRef<HTMLInputElement>(null);
+
     return (
         <div
             id={props.id}
             className={`search-bar-container ${props.className}`}
             style={props.style}
+            onClick={(e) => {
+                // e.stopPropagation();
+                e.preventDefault();
+                ref.current?.focus();
+            }}
         >
             <BaseIconButton style={{ color: "#cac4ce" }} {...leadingButton} />
             <input
@@ -20,6 +28,7 @@ const SearchBar = ({
                 placeholder={props.hint}
                 value={props.value}
                 onChange={(e) => props.onChangeText?.(e.target.value)}
+                ref={ref}
             />
             {props.trailingButton && (
                 <BaseIconButton

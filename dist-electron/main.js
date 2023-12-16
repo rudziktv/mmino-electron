@@ -1,36 +1,43 @@
 "use strict";
 const electron = require("electron");
 const path = require("node:path");
-const DownloadFileHandler = (window, app, config) => {
+const DownloadFileHandler = (window, config) => {
   if (window) {
     window.webContents.session.downloadURL(
       config.url,
       config.downloadOptions
     );
-    window.webContents.session.on(
-      "will-download",
-      (_, item, webContents) => {
-        if (item.getURL() === config.url) {
-          if (config.directory) {
-            item.setSavePath(config.directory);
-          }
-          item.on("updated", (_2, state) => {
-            window.webContents.send(
-              `updated-${config.eventChannel}`,
-              2
-            );
-            item.getTotalBytes();
-            item.getFilename();
-          });
-          item.once("done", (_2, state) => {
-            window.webContents.send(
-              `done-${config.eventChannel}`,
-              2
-            );
-          });
+    window.webContents.session.on("will-download", (_, item) => {
+      if (item.getURL() === config.url) {
+        if (config.directory) {
+          item.setSavePath(config.directory);
         }
+        item.on("updated", (_2, state) => {
+          const args = {
+            state,
+            data: {
+              receivedBytes: item.getReceivedBytes(),
+              totalBytes: item.getTotalBytes(),
+              filename: item.getFilename()
+            }
+          };
+          window.webContents.send(
+            `updated-${config.eventChannel}`,
+            args
+          );
+        });
+        item.once("done", (_2, state) => {
+          const args = {
+            state,
+            directory: item.getSavePath()
+          };
+          window.webContents.send(
+            `done-${config.eventChannel}`,
+            args
+          );
+        });
       }
-    );
+    });
   }
 };
 const GET_PATH_CHANNEL = "getPath";
@@ -130,7 +137,7 @@ electron.app.whenReady().then(() => {
   });
   electron.ipcMain.handle("downloadUrl", (_, configJSON) => {
     const config = JSON.parse(configJSON);
-    DownloadFileHandler(win, electron.app, config);
+    DownloadFileHandler(win, config);
   });
   electron.ipcMain.handle(GET_PATH_CHANNEL, (_, type) => {
     return electron.app.getPath(type);

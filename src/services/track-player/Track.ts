@@ -4,4 +4,5 @@ export interface Track extends MediaMetadataInit {
     duration: number;
     duration_formatted: string;
     source_url: string;
+    directory_url?: string;
 }

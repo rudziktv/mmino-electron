@@ -57,6 +57,10 @@
     flex: 1;
 }
 
+#home-main-view > * {
+    z-index: 1;
+}
+
 #home-last-played {
     display: flex;
     flex-direction: column;

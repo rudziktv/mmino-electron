@@ -1,21 +1,13 @@
+import { MessageBoxOptions, contextBridge, ipcRenderer } from "electron";
 import {
-    DownloadItem,
-    MessageBoxOptions,
-    app,
-    contextBridge,
-    ipcRenderer,
-} from "electron";
-import {
-    DOWNLOAD_URL_CHANNEL,
-    DownloadCallback,
+    DownloadCompletedArgs,
     DownloadConfig,
+    DownloadUpdatedArgs,
 } from "../src/services/download/DownloadIpcMain";
 import {
     GET_APP_PATH_CHANNEL,
     GET_PATH_CHANNEL,
     PathTypes,
-    getAppPathContextBridge,
-    getPathContextBridge,
 } from "../src/services/path/PathIpcMain";
 
 // --------- Expose some API to the Renderer process ---------
@@ -172,7 +164,7 @@ contextBridge.exposeInMainWorld("restAPI", {
 contextBridge.exposeInMainWorld("downloadAPI", {
     downloadUrl: (config: DownloadConfig) => {
         // console.log("downloadurl", config);
-        const { url, downloadOptions, callback, directory } = config;
+        const { url, downloadOptions, directory } = config;
         const eventChannel = `downloadUrl-${url}`;
         ipcRenderer.invoke(
             "downloadUrl",
@@ -180,9 +172,25 @@ contextBridge.exposeInMainWorld("downloadAPI", {
             // config.downloadOptions
         );
 
-        ipcRenderer.on(eventChannel, (event, item: DownloadItem) => {
-            alert(eventChannel);
-            callback(item);
+        // ipcRenderer.on(eventChannel, (_, item: DownloadItem) => {
+        //     alert(eventChannel);
+        //     callback(item);
+        // });
+
+        // ipcRenderer.on(`updated-${eventChannel}`, (_, a) => {
+        //     const args = a as DownloadUpdatedArgs;
+
+        //     if (config.callbackOnUpdated) {
+        //         config.callbackOnUpdated(args.state, args.data);
+        //     }
+        // });
+
+        ipcRenderer.once(`done-${eventChannel}`, (_, a) => {
+            const args = a as DownloadCompletedArgs;
+
+            if (config.callbackOnCompleted) {
+                config.callbackOnCompleted(args.state, args.directory);
+            }
         });
     },
 });

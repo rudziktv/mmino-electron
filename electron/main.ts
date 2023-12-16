@@ -152,9 +152,7 @@ app.whenReady().then(() => {
 
     ipcMain.handle("downloadUrl", (_, configJSON: string) => {
         const config = JSON.parse(configJSON) as DownloadConfigMain;
-        DownloadFileHandler(win, app, config);
-
-        // app.getPath
+        DownloadFileHandler(win, config);
     });
 
     ipcMain.handle(GET_PATH_CHANNEL, (_, type: PathTypes) => {
@@ -164,20 +162,6 @@ app.whenReady().then(() => {
     ipcMain.handle(GET_APP_PATH_CHANNEL, () => {
         return app.getAppPath();
     });
-
-    // win?.webContents.session.on("will-download", (_, item, __) => {
-    //     // item.setSavePath("/tmp/test.aac");
-    //     const filename = path.parse(item.getFilename()).name + ".aac";
-    //     const filePath = path.join(app.getPath("downloads"), filename);
-    //     item.setSavePath(filePath);
-
-    //     item.once("done", (event, state) => {
-    //         if (state === "completed") {
-    //             shell.showItemInFolder(filePath);
-    //         }
-    //     });
-    // });
-    // win?.webContents.session.setPermissionRequestHandler()
 });
 
 ipcMain.on("minimizeWindow", () => {

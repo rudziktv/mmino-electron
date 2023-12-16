@@ -15,8 +15,13 @@ const PlayerControls = ({}: PlayerControlsProps) => {
     const player = usePlayer();
     const audioRef = player.audioRef;
 
-    const [progress, setProgress] = useState(0);
-    const [volume, setVolume] = useState(0);
+    const [progress, setProgress] = useState(
+        (audioRef?.current?.currentTime || 1) /
+            (audioRef?.current?.duration || 1)
+    );
+    const [volume, setVolume] = useState(
+        (audioRef?.current?.volume || 1) * 100 || 50
+    );
 
     const [isPlaying, setIsPlaying] = useState(
         player.audioRef?.current?.paused != null
@@ -24,32 +29,7 @@ const PlayerControls = ({}: PlayerControlsProps) => {
             : false
     );
 
-    // const a = async () => {
-    //     console.log("supabase");
-    //     const { data } = await supabase.functions.invoke<{ message: string }>(
-    //         "get-video-source",
-    //         {
-    //             body: {
-    //                 video_id: "MkWDKJjhbvw",
-    //             },
-    //             method: "POST",
-    //         }
-    //     );
-
-    //     if (data) {
-    //         // downloadFile(data.message);
-    //         // downloadUrl({
-    //         //     url: "https://file-examples.com/storage/fe1734aff46541d35a76822/2017/02/file-sample_100kB.doc",
-    //         //     callback(item) {
-    //         //         item.once("done", () => {
-    //         //             alert("done");
-    //         //         });
-    //         //     },
-    //         // });
-
-    //         alert(await getPath("appData"));
-    //     }
-    // };
+    const [muted, setMuted] = useState(audioRef?.current?.muted || false);
 
     const PlayPause = () => {
         if (!audioRef?.current) {
@@ -163,10 +143,35 @@ const PlayerControls = ({}: PlayerControlsProps) => {
             </div>
             <div id="player-controls-right">
                 <BaseIconButton icon="ri-play-list-2-line" />
-                <BaseIconButton icon="ri-volume-mute-line" />
+                <BaseIconButton
+                    icon={
+                        volume == 0
+                            ? "ri-volume-mute-line"
+                            : volume > 50
+                            ? "ri-volume-up-line"
+                            : "ri-volume-down-line"
+                    }
+                    toggled={muted}
+                    toggledIcon="ri-volume-mute-line"
+                    onClick={() => {
+                        if (!audioRef?.current) {
+                            return;
+                        }
+                        setMuted(!muted);
+                        audioRef.current.muted = !muted;
+                    }}
+                />
                 <Slider
-                    value={volume}
-                    setValue={setVolume}
+                    value={muted ? 0 : volume}
+                    setValue={(value) => {
+                        if (!audioRef?.current) {
+                            return;
+                        }
+
+                        setVolume(value);
+                        audioRef.current.volume = value / 100;
+                    }}
+                    updateType="onDrag"
                     label={() => volume.toFixed()}
                 />
             </div>

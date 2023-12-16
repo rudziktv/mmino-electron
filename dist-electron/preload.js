@@ -116,16 +116,18 @@ electron.contextBridge.exposeInMainWorld("restAPI", {
 });
 electron.contextBridge.exposeInMainWorld("downloadAPI", {
   downloadUrl: (config) => {
-    const { url, downloadOptions, callback, directory } = config;
+    const { url, downloadOptions, directory } = config;
     const eventChannel = `downloadUrl-${url}`;
     electron.ipcRenderer.invoke(
       "downloadUrl",
       JSON.stringify({ url, downloadOptions, eventChannel, directory })
       // config.downloadOptions
     );
-    electron.ipcRenderer.on(eventChannel, (event, item) => {
-      alert(eventChannel);
-      callback(item);
+    electron.ipcRenderer.once(`done-${eventChannel}`, (_, a) => {
+      const args = a;
+      if (config.callbackOnCompleted) {
+        config.callbackOnCompleted(args.state, args.directory);
+      }
     });
   }
 });
