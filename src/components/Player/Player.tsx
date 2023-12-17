@@ -1,29 +1,29 @@
-import { createContext, useEffect } from "react";
+import { createContext, useMemo, useRef } from "react";
 import playback from "../../assets/videoplayback.aac";
+import TrackPlayer from "../../services/track-player/TrackPlayer";
 
 const Player = (props: PlayerProps) => {
     return <audio src={props.src} ref={props.audioRef} />;
 };
 
-const PlayerContainer = (props: PlayerProviderProps) => {
+const PlayerContainer = (props: PlayerContainerProps) => {
+    const audioRef = useRef<HTMLAudioElement>(null);
+    const trackPlayer = useMemo(() => new TrackPlayer(audioRef), []);
+
     return (
         <PlayerContext.Provider
             value={{
-                src: props.src,
-                setSrc: props.setSrc,
-                audioRef: props.audioRef,
+                audioRef: audioRef,
+                trackPlayer: trackPlayer,
             }}
         >
             {props.children}
-            <Player audioRef={props.audioRef} src={props.src} />
+            <Player audioRef={audioRef} src={playback} />
         </PlayerContext.Provider>
     );
 };
 
-export interface PlayerProviderProps extends IPlayer {
-    // src?: string;
-    // setSrc?: (src: string) => void;
-    // audioRef?: React.RefObject<HTMLAudioElement>;
+export interface PlayerContainerProps {
     children?: React.ReactNode;
 }
 
@@ -32,16 +32,13 @@ export interface PlayerProps {
     audioRef?: React.RefObject<HTMLAudioElement>;
 }
 
-export interface IPlayer {
-    src: string;
-    setSrc: (src: string) => void;
-    // trackController
+export interface IPlayerContext {
+    trackPlayer: TrackPlayer;
     audioRef?: React.RefObject<HTMLAudioElement>;
 }
 
-export const PlayerContext = createContext<IPlayer>({
-    src: "",
-    setSrc: () => {},
+export const PlayerContext = createContext<IPlayerContext>({
+    trackPlayer: new TrackPlayer(),
 });
 
 export default PlayerContainer;

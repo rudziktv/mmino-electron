@@ -16,7 +16,7 @@ const PlayerControls = ({}: PlayerControlsProps) => {
     const audioRef = player.audioRef;
 
     const [progress, setProgress] = useState(
-        (audioRef?.current?.currentTime || 1) /
+        (audioRef?.current?.currentTime || 0) /
             (audioRef?.current?.duration || 1)
     );
     const [volume, setVolume] = useState(
@@ -46,18 +46,18 @@ const PlayerControls = ({}: PlayerControlsProps) => {
             navigator.mediaSession.playbackState = "paused";
         }
 
-        navigator.mediaSession.metadata = new MediaMetadata({
-            title: "Mmino",
-            artist: "Mmino",
-            album: "Mmino",
-            artwork: [
-                {
-                    src: "https://i1.sndcdn.com/artworks-HwXGFlkUDOAUhYiS-Btndew-t500x500.jpg",
-                    sizes: "500x500",
-                    type: "image/jpg",
-                },
-            ],
-        });
+        // navigator.mediaSession.metadata = new MediaMetadata({
+        //     title: "Mmino",
+        //     artist: "Mmino",
+        //     album: "Mmino",
+        //     artwork: [
+        //         {
+        //             src: "https://i1.sndcdn.com/artworks-HwXGFlkUDOAUhYiS-Btndew-t500x500.jpg",
+        //             sizes: "500x500",
+        //             type: "image/jpg",
+        //         },
+        //     ],
+        // });
     };
 
     useEffect(() => {
@@ -65,16 +65,16 @@ const PlayerControls = ({}: PlayerControlsProps) => {
             return;
         }
 
-        navigator.mediaSession.setActionHandler("play", PlayPause);
-        navigator.mediaSession.setActionHandler("pause", PlayPause);
-        navigator.mediaSession.setActionHandler("nexttrack", PlayPause);
-        navigator.mediaSession.setActionHandler("previoustrack", PlayPause);
-        navigator.mediaSession.setActionHandler("stop", PlayPause);
-        // navigator.mediaSession.setActionHandler("playpause", PlayPause);
-        navigator.mediaSession.setPositionState({
-            position: 0,
-            duration: 0,
-        });
+        // navigator.mediaSession.setActionHandler("play", PlayPause);
+        // navigator.mediaSession.setActionHandler("pause", PlayPause);
+        // navigator.mediaSession.setActionHandler("nexttrack", PlayPause);
+        // navigator.mediaSession.setActionHandler("previoustrack", PlayPause);
+        // navigator.mediaSession.setActionHandler("stop", PlayPause);
+        // // navigator.mediaSession.setActionHandler("playpause", PlayPause);
+        // navigator.mediaSession.setPositionState({
+        //     position: 0,
+        //     duration: 0,
+        // });
 
         audioRef.current.ontimeupdate = () => {
             if (!audioRef.current) {
@@ -93,15 +93,29 @@ const PlayerControls = ({}: PlayerControlsProps) => {
 
         audioRef.current.onpause = () => setIsPlaying(false);
         audioRef.current.onplay = () => setIsPlaying(true);
+
+        // audioRef.current.onload
     }, []);
 
     return (
         <div id="player-controls">
             <div id="player-controls-left">
-                <div id="player-controls-cover" />
+                <div
+                    id="player-controls-cover"
+                    style={{
+                        backgroundImage: `url(${
+                            navigator.mediaSession.metadata?.artwork?.[0]
+                                ?.src || ""
+                        })`,
+                    }}
+                />
                 <div id="player-controls-info">
-                    <span id="player-controls-title">Title</span>
-                    <span id="player-controls-artist">Artist</span>
+                    <span id="player-controls-title">
+                        {navigator.mediaSession.metadata?.title}
+                    </span>
+                    <span id="player-controls-artist">
+                        {navigator.mediaSession.metadata?.artist}
+                    </span>
                 </div>
             </div>
             <div id="player-controls-mid">
@@ -161,19 +175,21 @@ const PlayerControls = ({}: PlayerControlsProps) => {
                         audioRef.current.muted = !muted;
                     }}
                 />
-                <Slider
-                    value={muted ? 0 : volume}
-                    setValue={(value) => {
-                        if (!audioRef?.current) {
-                            return;
-                        }
+                <div id="player-controls-volume-slider">
+                    <Slider
+                        value={muted ? 0 : volume}
+                        setValue={(value) => {
+                            if (!audioRef?.current) {
+                                return;
+                            }
 
-                        setVolume(value);
-                        audioRef.current.volume = value / 100;
-                    }}
-                    updateType="onDrag"
-                    label={() => volume.toFixed()}
-                />
+                            setVolume(value);
+                            audioRef.current.volume = value / 100;
+                        }}
+                        updateType="onDrag"
+                        label={() => volume.toFixed()}
+                    />
+                </div>
             </div>
         </div>
     );

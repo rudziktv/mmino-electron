@@ -1,5 +1,4 @@
 import { useLoaderData, useNavigate } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
 import { supabase } from "../supabase/client";
 import "../styles/Home.css";
 import Avatar from "../design/interface/Avatar/Avatar";
@@ -9,17 +8,10 @@ import useLodaing from "../hooks/useLoading";
 import SideModal from "../design/interface/SideSheets/SideModal";
 import NotificationItem from "../components/NotificationItem/NotificationItem";
 import PlayerControls from "../components/Player/PlayerControls";
-import OutlinedTextInput from "../design/interface/TextInput/OutlinedTextInput";
 import FilledCard from "../design/interface/Card/FilledCard";
-import Slider from "../design/interface/Slider/Slider";
 import LastPlayedItem from "../components/LastPlayedItem/LastPlayedItem";
-import TextButton from "../design/interface/Button/CommonButtons/TextButton";
-import { downloadUrl } from "../services/download/DownloadIpcRenderer";
-// import path from "node:path";
-import { getAppPath, getPath } from "../services/path/PathIpcRenderer";
 import { IAuthLoaderData } from "../router/loader/AuthLoader";
-import usePlayer from "../hooks/usePlayer";
-import { showOpenDialog, showSaveDialog } from "../../electron/ipc";
+// import usePlayer from "../hooks/usePlayer";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -29,15 +21,15 @@ const Home = () => {
     const [loading, setLoading] = useState(false);
     const loadModal = useLodaing(loading);
 
-    const [slider, setSlider] = useState(0);
+    // const [slider, setSlider] = useState(0);
 
     const [modal, setModal] = useState(false);
 
-    const [url, setUrl] = useState("");
+    // const [url, setUrl] = useState("");
 
-    const [path, setPath] = useState("");
+    // const [path, setPath] = useState("");
 
-    const player = usePlayer();
+    // const player = usePlayer();
 
     // const auth = useAuth();
 
@@ -116,8 +108,45 @@ const Home = () => {
                             ? "Logged in"
                             : "Signed out"}
                     </span>
+                    <p
+                        style={{
+                            textAlign: "left",
+                            fontSize: 16,
+                        }}
+                    >
+                        <span
+                            style={{
+                                fontWeight: 600,
+                                fontSize: 24,
+                                marginLeft: 10,
+                            }}
+                        >
+                            Changelog 17.12.2023
+                        </span>
+                        <ul>
+                            <li>Now you can play tracks from search.</li>
+                            <li>Removed ID bar, to setup audio src</li>
+                            <li>Fixed player reinitialize</li>
+                            <li>Being authorized is now required to use app</li>
+                            <li>
+                                Youtube title, artist name and thumbnail is
+                                shown in MediaMetadata
+                            </li>
+                            <li>
+                                I've been fucking up with files shit for last 8
+                                hours and no I am not even close to manage to
+                                work it
+                            </li>
+                            <li>
+                                Home title show email as $username, it's
+                                temporary, just for now
+                            </li>
+                            <li>Some styling for player</li>
+                            <li>Player info now shows from MediaMetadata</li>
+                        </ul>
+                    </p>
                     {/* <span>{String(auth)}</span> */}
-                    <OutlinedTextInput
+                    {/* <OutlinedTextInput
                         placeholder="Enter ID of yt video"
                         onChangeText={setUrl}
                         value={url}
@@ -134,9 +163,9 @@ const Home = () => {
                                     },
                                 }
                             );
-                            player.setSrc(response.data.message);
+                            // player.setSrc(response.data.message);
                         }}
-                    />
+                    /> */}
                     {/* <TextButton
                         title="Test Download"
                         onClick={async () => {

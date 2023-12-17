@@ -2,18 +2,14 @@ import NavigationRail from "../design/interface/NavigationRail/NavigationRail";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import "./AppRail.css";
 import PlayerContainer from "../components/Player/Player";
-import { useRef, useState } from "react";
-// import useAuth from "../hooks/useAuth";
-import playback from "../assets/videoplayback.aac";
+// import { useMemo, useRef, useState } from "react";
+// // import useAuth from "../hooks/useAuth";
+// import playback from "../assets/videoplayback.aac";
 import { MAIN_HOME_PATH, MAIN_SEARCH_PATH } from "./Paths";
 
 const AppRail = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    // const auth = useAuth();
-
-    const [audioSource, setAudioSource] = useState(playback);
-    const audioRef = useRef<HTMLAudioElement>(null);
 
     // useEffect(() => {
     //     console.log(location.pathname);
@@ -60,11 +56,7 @@ const AppRail = () => {
                 ]}
             />
 
-            <PlayerContainer
-                src={audioSource}
-                setSrc={setAudioSource}
-                audioRef={audioRef}
-            >
+            <PlayerContainer>
                 <section id="screen">
                     <Outlet />
                 </section>

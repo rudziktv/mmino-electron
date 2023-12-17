@@ -45,17 +45,23 @@
 #player-controls-left {
     display: flex;
     align-items: center;
-    width: 256px;
+    width: clamp(256px, 25%, 512px);
     gap: 12px;
 }
 
 #player-controls-right {
-    width: 256px;
+    width: clamp(256px, 25%, 512px);
 
     display: flex;
+    justify-content: flex-end;
     align-items: center;
     /* justify-content: flex-end; */
     gap: 12px;
+}
+
+#player-controls-volume-slider {
+    flex: 1;
+    max-width: 128px;
 }
 
 #player-controls-info {
@@ -81,4 +87,8 @@
     border-radius: 8px;
 
     background-color: #382e2e;
+    flex-shrink: 0;
+
+    background-position: center;
+    background-size: cover;
 }

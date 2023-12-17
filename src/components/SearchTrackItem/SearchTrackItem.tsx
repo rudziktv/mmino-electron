@@ -5,6 +5,7 @@ import "./SearchTrackItem.css";
 import ContextMenu from "../../design/interface/ContextMenu/ContextMenu";
 import { supabase } from "../../supabase/client";
 import { openExternal } from "../../services/shell/ShellIpcRenderer";
+import usePlayer from "../../hooks/usePlayer";
 
 const SearchTrackItem = (props: SearchTrackItemProps) => {
     const ref = useRef(null);
@@ -33,6 +34,22 @@ const SearchTrackItem = (props: SearchTrackItemProps) => {
         }
     };
 
+    const getSource = async () => {
+        const response = await supabase.functions.invoke("get-video-source", {
+            body: {
+                video_id: props.id,
+            },
+        });
+
+        if (response.data) {
+            console.log(response.data);
+            return response.data.message;
+        }
+        return "";
+    };
+
+    const player = usePlayer();
+
     const star = async () => {
         const response = await supabase.from("starred_tracks").insert({
             user_id: (await supabase.auth.getUser()).data.user?.id,
@@ -44,10 +61,21 @@ const SearchTrackItem = (props: SearchTrackItemProps) => {
         <div
             className="search-track-item"
             ref={ref}
-            onClick={(e) => {
+            onClick={async (e) => {
                 e.stopPropagation();
                 e.preventDefault();
                 invokeRipple(e);
+                player.trackPlayer.PushTrack({
+                    album: "",
+                    title: props.title || "",
+                    artist: props.artists || "",
+                    artwork: [
+                        {
+                            src: props.thumbnail || "",
+                        },
+                    ],
+                    source_url: await getSource(),
+                });
             }}
             // onClickCapture={() => {
             //     console.log("itemclick");
