@@ -20,7 +20,7 @@ const PlayerControls = ({}: PlayerControlsProps) => {
             (audioRef?.current?.duration || 1)
     );
     const [volume, setVolume] = useState(
-        (audioRef?.current?.volume || 1) * 100 || 50
+        (audioRef?.current?.volume || 0.5) * 100
     );
 
     const [isPlaying, setIsPlaying] = useState(
