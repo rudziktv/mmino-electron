@@ -10,6 +10,7 @@ import Account from "../screens/Account";
 import Search from "../screens/Search";
 import { useEffect } from "react";
 import useAuth from "../hooks/useAuth";
+import { AuthLoader } from "./loader/AuthLoader";
 
 const router = createBrowserRouter([
     {
@@ -19,21 +20,26 @@ const router = createBrowserRouter([
             {
                 path: "app/main",
                 element: <AppRail />,
+                loader: AuthLoader,
                 children: [
                     {
                         path: "home",
+                        loader: AuthLoader,
                         element: <Home />,
                     },
                     {
                         path: "search",
+                        loader: AuthLoader,
                         element: <Search />,
                     },
                     {
                         path: "playlists",
+                        loader: AuthLoader,
                         element: <Home />,
                     },
                     {
                         path: "account",
+                        loader: AuthLoader,
                         element: <Account />,
                     },
                 ],

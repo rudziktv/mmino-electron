@@ -99,6 +99,12 @@ electron.contextBridge.exposeInMainWorld("dialogAPI", {
   showMessageBox: (config) => electron.ipcRenderer.invoke("messageBox", config),
   showErrorBox: (title, content) => {
     electron.ipcRenderer.invoke("errorBox", title, content);
+  },
+  showSaveDialog: (options) => {
+    return electron.ipcRenderer.invoke("showSaveDialog", options);
+  },
+  showOpenDialog: (options) => {
+    return electron.ipcRenderer.invoke("showOpenDialog", options);
   }
 });
 electron.contextBridge.exposeInMainWorld("interfaceAPI", {
@@ -117,11 +123,11 @@ electron.contextBridge.exposeInMainWorld("restAPI", {
 electron.contextBridge.exposeInMainWorld("downloadAPI", {
   downloadUrl: (config) => {
     const { url, downloadOptions, directory } = config;
-    const eventChannel = `downloadUrl-${url}`;
+    const uuid = self.crypto.randomUUID();
+    const eventChannel = `downloadUrl-${uuid}`;
     electron.ipcRenderer.invoke(
       "downloadUrl",
       JSON.stringify({ url, downloadOptions, eventChannel, directory })
-      // config.downloadOptions
     );
     electron.ipcRenderer.once(`done-${eventChannel}`, (_, a) => {
       const args = a;

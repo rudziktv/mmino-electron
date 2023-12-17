@@ -44,21 +44,15 @@ function createWindow() {
         icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
-            // contextIsolation: false,
             nodeIntegration: true,
             sandbox: false,
+            // contextIsolation: false,
             // enableRemoteModule: true,
             // devTools: true
         },
         titleBarStyle: "hidden",
         minWidth: 1000,
         minHeight: 500,
-        // titleBarOverlay: {
-        //     color: "#00000000",
-        //     symbolColor: "#ffffff",
-        //     height: 32,
-        // },
-        // frame: false,
     });
 
     // Test active push message to Renderer-process.
@@ -129,6 +123,7 @@ app.whenReady().then(() => {
                 // contextIsolation: false,
                 nodeIntegration: true,
                 sandbox: false,
+                webSecurity: false,
                 // enableRemoteModule: true,
                 // devTools: true
             },
@@ -162,6 +157,20 @@ app.whenReady().then(() => {
     ipcMain.handle(GET_APP_PATH_CHANNEL, () => {
         return app.getAppPath();
     });
+
+    ipcMain.handle(
+        "showSaveDialog",
+        async (_, options: Electron.SaveDialogOptions) => {
+            return await dialog.showSaveDialog(options);
+        }
+    );
+
+    ipcMain.handle(
+        "showOpenDialog",
+        async (_, options: Electron.OpenDialogOptions) => {
+            return await dialog.showOpenDialog(options);
+        }
+    );
 });
 
 ipcMain.on("minimizeWindow", () => {

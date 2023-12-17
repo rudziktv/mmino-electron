@@ -15,7 +15,7 @@ const PlayerContainer = (props: PlayerProviderProps) => {
             }}
         >
             {props.children}
-            <Player audioRef={props.audioRef} src={playback} />
+            <Player audioRef={props.audioRef} src={props.src} />
         </PlayerContext.Provider>
     );
 };

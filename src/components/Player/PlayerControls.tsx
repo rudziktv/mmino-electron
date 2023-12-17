@@ -82,8 +82,8 @@ const PlayerControls = ({}: PlayerControlsProps) => {
             }
 
             navigator.mediaSession.setPositionState({
-                position: audioRef.current.currentTime,
-                duration: audioRef.current.duration,
+                position: audioRef.current.currentTime || 0,
+                duration: audioRef.current.duration || 1,
             });
 
             setProgress(

@@ -1,10 +1,10 @@
-import { useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { supabase } from "../supabase/client";
 import "../styles/Home.css";
 import Avatar from "../design/interface/Avatar/Avatar";
 import ContextMenu from "../design/interface/ContextMenu/ContextMenu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useLodaing from "../hooks/useLoading";
 import SideModal from "../design/interface/SideSheets/SideModal";
 import NotificationItem from "../components/NotificationItem/NotificationItem";
@@ -14,9 +14,17 @@ import FilledCard from "../design/interface/Card/FilledCard";
 import Slider from "../design/interface/Slider/Slider";
 import LastPlayedItem from "../components/LastPlayedItem/LastPlayedItem";
 import TextButton from "../design/interface/Button/CommonButtons/TextButton";
+import { downloadUrl } from "../services/download/DownloadIpcRenderer";
+// import path from "node:path";
+import { getAppPath, getPath } from "../services/path/PathIpcRenderer";
+import { IAuthLoaderData } from "../router/loader/AuthLoader";
+import usePlayer from "../hooks/usePlayer";
+import { showOpenDialog, showSaveDialog } from "../../electron/ipc";
 
 const Home = () => {
     const navigate = useNavigate();
+
+    const loaderData = useLoaderData() as IAuthLoaderData;
 
     const [loading, setLoading] = useState(false);
     const loadModal = useLodaing(loading);
@@ -26,21 +34,26 @@ const Home = () => {
     const [modal, setModal] = useState(false);
 
     const [url, setUrl] = useState("");
-    // const player = usePlayer();
 
-    // useEffect(() => {
-    //     // player.setSrc()
-    // }, [url]);
+    const [path, setPath] = useState("");
 
-    const auth = useAuth();
+    const player = usePlayer();
 
-    // useEffect(() => {}, []);
+    // const auth = useAuth();
+
+    useEffect(() => {
+        console.log(loaderData);
+
+        if (!loaderData.auth) {
+            navigate("/app/auth/login");
+        }
+    }, []);
 
     return (
         <div id="home-screen">
             <header id="home-header">
                 <span className="title" id="home-title">
-                    Hi $username!
+                    Hi {loaderData.auth.user?.email}!
                 </span>
                 <ContextMenu
                     buttons={[
@@ -98,22 +111,84 @@ const Home = () => {
                 </FilledCard>
 
                 <FilledCard id="home-main-view">
-                    <span>Home</span>
-
-                    <span>{String(auth)}</span>
-
+                    <span>
+                        {loaderData.auth.authorized
+                            ? "Logged in"
+                            : "Signed out"}
+                    </span>
+                    {/* <span>{String(auth)}</span> */}
                     <OutlinedTextInput
-                        placeholder="Enter URL"
+                        placeholder="Enter ID of yt video"
                         onChangeText={setUrl}
                         value={url}
                         backgroundColor="#221c1c"
                     />
+                    <TextButton
+                        title="Test"
+                        onClick={async () => {
+                            const response = await supabase.functions.invoke(
+                                "get-video-source",
+                                {
+                                    body: {
+                                        video_id: url,
+                                    },
+                                }
+                            );
+                            player.setSrc(response.data.message);
+                        }}
+                    />
+                    {/* <TextButton
+                        title="Test Download"
+                        onClick={async () => {
+                            downloadUrl({
+                                url: url,
+                                // directory: path.join(),
+                                directory: `${await getPath(
+                                    "userData"
+                                )}\\testfile.aac`,
+                                callbackOnCompleted: (_, directory) => {
+                                    alert("Download completed");
+                                    if (!directory) {
+                                        return;
+                                    }
+                                    const file = directory;
+                                    // .replace(/\\/, "\\\\")
+                                    // .replace("/", "\\\\");
+                                    console.log(file);
+                                    player.setSrc(
+                                        `file:///${file}` ||
+                                            "/src/assets/videoplayback.aac"
+                                    );
+                                },
+                            });
+                            // player.setSrc(url);
+                        }}
+                    />
+                    <TextButton
+                        title="Check directory"
+                        onClick={async () => {
+                            alert(await getPath("userData"));
+                        }}
+                    />
+                    <TextButton
+                        title="Select file"
+                        onClick={async () => {
+                            const file = await showOpenDialog({});
+                            console.log(file);
+                            if (!file.canceled && file.filePaths.length > 0) {
+                                const filename = file.filePaths[0];
+                                // .replace(
+                                //     /\\/,
+                                //     "\\\\"
+                                // );
+                                // .replace("/", "\\\\");
+                                console.log(filename);
 
-                    <TextButton title="Open" />
-
-                    {/* <LinearProgressIndicator progress={100} /> */}
-
-                    <Slider value={slider} setValue={setSlider} />
+                                player.setSrc(`file:///${filename}`);
+                            }
+                        }}
+                    /> */}
+                    {/* <Slider value={slider} setValue={setSlider} /> */}
                 </FilledCard>
             </div>
 

@@ -55,21 +55,15 @@ function createWindow() {
     icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
-      // contextIsolation: false,
       nodeIntegration: true,
       sandbox: false
+      // contextIsolation: false,
       // enableRemoteModule: true,
       // devTools: true
     },
     titleBarStyle: "hidden",
     minWidth: 1e3,
     minHeight: 500
-    // titleBarOverlay: {
-    //     color: "#00000000",
-    //     symbolColor: "#ffffff",
-    //     height: 32,
-    // },
-    // frame: false,
   });
   win.webContents.on("did-finish-load", () => {
     win == null ? void 0 : win.webContents.send(
@@ -120,7 +114,8 @@ electron.app.whenReady().then(() => {
         preload: path.join(__dirname, "preload.js"),
         // contextIsolation: false,
         nodeIntegration: true,
-        sandbox: false
+        sandbox: false,
+        webSecurity: false
         // enableRemoteModule: true,
         // devTools: true
       }
@@ -145,6 +140,18 @@ electron.app.whenReady().then(() => {
   electron.ipcMain.handle(GET_APP_PATH_CHANNEL, () => {
     return electron.app.getAppPath();
   });
+  electron.ipcMain.handle(
+    "showSaveDialog",
+    async (_, options) => {
+      return await electron.dialog.showSaveDialog(options);
+    }
+  );
+  electron.ipcMain.handle(
+    "showOpenDialog",
+    async (_, options) => {
+      return await electron.dialog.showOpenDialog(options);
+    }
+  );
 });
 electron.ipcMain.on("minimizeWindow", () => {
   win == null ? void 0 : win.minimize();
