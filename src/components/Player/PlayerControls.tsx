@@ -16,8 +16,9 @@ const PlayerControls = ({}: PlayerControlsProps) => {
     const audioRef = player.audioRef;
 
     const [progress, setProgress] = useState(
-        (audioRef?.current?.currentTime || 0) /
-            (audioRef?.current?.duration || 1)
+        ((audioRef?.current?.currentTime || 0) /
+            (audioRef?.current?.duration || 1)) *
+            100
     );
     const [volume, setVolume] = useState(
         (audioRef?.current?.volume || 0.5) * 100
