@@ -55,6 +55,9 @@ const SearchTrackItem = (props: SearchTrackItemProps) => {
         //     user_id: (await supabase.auth.getUser()).data.user?.id,
         //     track_id: props.id,
         // });
+        // await supabase.from("track_starred").insert({
+        //     track_id: props.id,
+        // });
     };
 
     return (
