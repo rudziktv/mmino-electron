@@ -51,10 +51,10 @@ const SearchTrackItem = (props: SearchTrackItemProps) => {
     const player = usePlayer();
 
     const star = async () => {
-        const response = await supabase.from("starred_tracks").insert({
-            user_id: (await supabase.auth.getUser()).data.user?.id,
-            track_id: props.id,
-        });
+        // const response = await supabase.from("starred_tracks").insert({
+        //     user_id: (await supabase.auth.getUser()).data.user?.id,
+        //     track_id: props.id,
+        // });
     };
 
     return (
